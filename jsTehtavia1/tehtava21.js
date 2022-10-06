@@ -4,3 +4,14 @@
 // Liisa tai Jorma. Jos syötetään jotain muuta, palautetaan funktiosta ”En tunne henkilöä”.
 // Toteuta ohjelma sekä ehtolausein että switch-case rakenteen avulla.
 
+const nimi = "Jarkko";
+let teksti = "";
+
+const funktio = (nimi) => {
+    if(nimi === "Pekka" || nimi === "Liisa" || nimi === "Jorma") {
+        teksti = `Minunkin mielestäni ${nimi} on kiva`; }
+    else { teksti = "En tunne henkilöä"; }
+    return teksti;
+};
+
+console.log(funktio(nimi));
