@@ -3,7 +3,7 @@ import Oppilas from "./Oppilas";
 const Luokka = ( props ) => {
     return (
         <>
-            <h2>Luokan nimi: {props.luokka.nimi}</h2>
+            <h2 style={{color:"red"}}>Luokan nimi: {props.luokka.nimi}</h2>
 
             <div>
                 Oppilaat: 
