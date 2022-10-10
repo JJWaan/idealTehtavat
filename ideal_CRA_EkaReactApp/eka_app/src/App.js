@@ -42,7 +42,7 @@ const Sovellus = () => {
         </div>
 
     </div>
-  );
-}
+  )
+};
 
 export default Sovellus;

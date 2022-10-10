@@ -5,8 +5,9 @@ const Luokka = ( props ) => {
         <>
             <h2>Luokan nimi: {props.luokka.nimi}</h2>
 
-            <div>Oppilaat: 
-            {props.luokka.oppilaat.map(oppilas => <Oppilas oppilas = {oppilas} />)}
+            <div>
+                Oppilaat: 
+                {props.luokka.oppilaat.map(oppilas => <Oppilas oppilas = {oppilas} />)}
             </div>
         </>
     )
