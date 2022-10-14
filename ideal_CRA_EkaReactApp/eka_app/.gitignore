@@ -4,6 +4,9 @@
 /node_modules
 /.pnp
 .pnp.js
+node_modules
+./tenttiSovellus01/node_modules
+/tenttiSovellus01/node_modules
 
 # testing
 /coverage
