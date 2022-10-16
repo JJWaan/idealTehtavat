@@ -12,7 +12,7 @@ const objs = [
     { "la": 22 }
 ];
 
-return päivät.sort((a, b) => {
+return objs.sort((a, b) => {
     return ( päiväjärjestys[Object.keys(a)[0]] - päiväjärjestys[Object.keys(b)[0]] );
   });
 };
