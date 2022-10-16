@@ -2,19 +2,18 @@
 // Muuta seuraavan pseudokoodin mukainen ohjelma funktioksi funktio. Keksi itse funktion
 // parametrit.
 
-// ALGORITMI
-// INPUT ”anna litrat”, L
-// IF ( L &gt;0 ) THEN
-// ( JOS (L&gt;0) NIIN)
-// INPUT “anna kilometrit”,K
-// IF ( K &gt; 0 ) THEN
+// ALGORITMI () => {
+// <input>”anna litrat”</input>
+// IF ( L &gt;0 ) {
+// if (L&gt;0))
+// <input>“anna kilometrit”</input>
+// IF ( K &gt; 0 ) {
 // sadalla = L * 100 / K
-// OUTPUT sadalla
+// return sadalla }
 // ELSE
-// OUTPUT ”virhesyöttö”
-// END IF
+// return ”error"
+// }
 // ELSE
-// OUTPUT ”virhesyöttö”
-// END IF
-// END ALGORITMI
+// return "error"
+// }
 

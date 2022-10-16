@@ -4,7 +4,7 @@
 // funktioita.
 
 const objektistaTaulukko = () => {
-    const päivät = {
+    const obj = {
       ma: 44,
       pe: 100,
       ke: 21,
@@ -14,7 +14,7 @@ const objektistaTaulukko = () => {
   
     const arr = [];
   
-    for (const [avain, arvo] of Object.entries(päivät)) {
+    for (const [avain, arvo] of Object.entries(obj)) {
       arr.push({ [avain]: arvo });
     }
   

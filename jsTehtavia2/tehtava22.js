@@ -14,5 +14,6 @@ const viikonpaivat = [
 ];
 
 for(let i = 0; i < viikonpaivat.length; i++) {
-
+    keskiarvo = keskiarvo+viikonpaivat.tyotunnit[i];
+    return keskiarvo / viikonpaivat.length;
 };
