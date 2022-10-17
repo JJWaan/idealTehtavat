@@ -1,5 +1,7 @@
 import React from "react";
 
+import Luokka from "./Luokka";
+
 const Koulu = (props) => {
     return (
         <>

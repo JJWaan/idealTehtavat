@@ -28,6 +28,7 @@ let koulu_ = {
 function App() {
   const [koulu, setKoulu] = useState(koulu_);
 
+  // brute force, kopsaa kaiken tiedon:
   const koulunNimiMuuttui = (nimi) => {
     const kouluKopio = JSON.parse(JSON.stringify(koulu))
     kouluKopio.nimi = nimi
