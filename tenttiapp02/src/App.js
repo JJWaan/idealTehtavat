@@ -1,10 +1,12 @@
 import './App.css';
 
+import TenttiEtusivu from "./TenttiEtusivu"
+
 function App() {
   return (
-    <div className="App">
-      <p>moi</p>
-    </div>
+    <>
+      <TenttiEtusivu />
+    </>
   );
 }
 
