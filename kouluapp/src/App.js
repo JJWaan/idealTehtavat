@@ -32,16 +32,17 @@ function App() {
   const koulunNimiMuuttui = (nimi) => {
     const kouluKopio = JSON.parse(JSON.stringify(koulu))
     kouluKopio.nimi = nimi
+    console.log("koulunNimiMuuttui funktio")
     setKoulu(kouluKopio)
-    console.log(kouluKopio)
+    // console.log(kouluKopio)
   };
 
   const oppilaanNimiMuuttui = (nimi,oppilaanIndex,luokanIndex) => {
     const kouluKopio = JSON.parse(JSON.stringify(koulu))
     kouluKopio.luokat[luokanIndex].oppilaat[oppilaanIndex].nimi = nimi
-    console.log("OK")  
+    console.log("oppilaanNimiMuuttui funktio")  
     setKoulu(kouluKopio)
-    console.log(kouluKopio)
+    // console.log(kouluKopio)
   };
 
   return (

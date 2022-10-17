@@ -1,11 +1,10 @@
 import './App.css';
-
-import TenttiEtusivu from "./TenttiEtusivu"
+import Applikaatio from './Applikaatio';
 
 function App() {
   return (
     <>
-      <TenttiEtusivu />
+      <Applikaatio />
     </>
   );
 }
