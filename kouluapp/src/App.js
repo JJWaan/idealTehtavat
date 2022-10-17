@@ -35,9 +35,17 @@ function App() {
     console.log(kouluKopio)
   };
 
+  const oppilaanNimiMuuttui = (nimi,oppilaanIndex,luokanIndex) => {
+    const kouluKopio = JSON.parse(JSON.stringify(koulu))
+    kouluKopio.luokat[luokanIndex].oppilaat[oppilaanIndex].nimi = nimi
+    console.log("OK")  
+    setKoulu(kouluKopio)
+    console.log(kouluKopio)
+  };
+
   return (
     <>
-        <Koulu koulu={koulu} koulunNimiMuuttui={koulunNimiMuuttui} />
+      <Koulu koulu = {koulu} oppilaanNimiMuuttui={oppilaanNimiMuuttui} koulunNimiMuuttui = {koulunNimiMuuttui}/> 
     </>
   )
 };
