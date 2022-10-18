@@ -1,10 +1,20 @@
 import './App.css';
-import Applikaatio from './Applikaatio';
+
+import Header from './HeaderElement';
+import Navbar from './Navbar';
+import Footer from './FooterElement';
+
+import MainContent from './TenttiEtusivu';
 
 function App() {
   return (
     <>
-      <Applikaatio />
+      <div className='main-flex-container'>
+        <Header />
+        <Navbar />
+        <MainContent />
+        <Footer />
+      </div>
     </>
   );
 }

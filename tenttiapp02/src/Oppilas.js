@@ -6,15 +6,14 @@ const Oppilas = (props) => {
       <div>{props.oppilas.nimi}
        <input type="text" onChange={(event)=>
         {props.dispatch({type:"OPPILAAN_NIMI_MUUTTUI",
-        payload:
-          {
-          nimi:event.target.value,
-          oppilaanIndex:props.index,
-          luokanIndex:props.luokanIndex}
-          })}}  value = {props.oppilas.nimi}/>
+        payload: {
+            nimi: event.target.value,
+            oppilaanIndex: props.index,
+            luokanIndex: props.luokanIndex,
+            key: props.id
+        } })}}
+        value = {props.oppilas.nimi}/>
   
-      </div>
-      <div>{props.tieto2}
       </div>
     </div>
   );
