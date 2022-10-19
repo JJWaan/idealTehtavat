@@ -4,7 +4,7 @@ const Kysymys = ({ kysymys, dispatch }) => {
   // Array(3) [ {…}, {…}, {…} ]
 
   const vastausvaihtoehdot = kysymys.vastausvaihtoehdot.map((item, index) => {
-    console.log("propsi kysymys={item.tenttiYksi}", kysymys)
+    console.log("propsi kysymys", kysymys)
 
     return (
       <div key={index}>
@@ -19,7 +19,7 @@ const Kysymys = ({ kysymys, dispatch }) => {
               type: 'VASTAUS_MUUTETTU',
               payload: {
                 uusiVastaus: event.target.value,
-                index: index,
+                index: item.index,
               },
             });
           }}
@@ -46,7 +46,7 @@ const Kysymys = ({ kysymys, dispatch }) => {
       <div className="kysymys">
 
           <input className="kysymys-input" type="text"
-            value={kysymys.kysymys}
+            // value={kysymys.kysymys}
             onChange={(event) =>
               dispatch({
                 type: 'KYSYMYS_MUUTETTU',
