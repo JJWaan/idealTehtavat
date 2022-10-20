@@ -144,6 +144,9 @@ const MainContent = () => {
       }, []);
 
       useEffect(() => {
+        // hardcode koska ei ole tentin indeksiä.
+        // Ajatuksena ottaa useState käyttöön
+        // tai mapata alkuperäinen tentit-lista mistä saisi sitten indexin
         if(tentti[0].seivataan == true) {
           console.log("state tallennetaan")
           localStorage.setItem('tenttidata', JSON.stringify(tentti));
