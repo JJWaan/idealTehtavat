@@ -75,43 +75,39 @@ let tentit = [
 // length: 2
 
 
-// --- --- --- //
-// reducer
+// --- --- --- ---//
+// r e d u c e r //
 const reducer = (state, action) => {
   switch (action.type) {
 
-  case 'KYSYMYS_MUUTETTU':
+  case 'KYSYMYS_MUUTETTU': {
     console.log("KYSYMYS_MUUTETTU reducer")
     const kopio = [...state];
-    console.log("state:", state)
+    // console.log("state:", state)
     const { kysymys, index, tenttiIndex } = action.payload;
-    console.log("KM payload:", action.payload);
+    // console.log("KM payload:", action.payload);
     kopio[tenttiIndex].seivataan = true;
     kopio[tenttiIndex].tenttiItessaan[index].kysymys = kysymys;
-    return kopio;
+    return kopio; }
 
-// case 'OIKEELLISUUS_MUUTETTU':
-//   console.log("oikeellisuusmuutettu reducer")
-//   const kopio__ = [...state];
-//   const { index: index__, uusiOikea } = action.payload;
-//   kopio[tentit].tenttiYksi[index].vastausvaihtoehdot[index].onkoOikea = uusiOikea;
-//   return kopio;
+  case 'VASTAUS_MUUTETTU': {
+    console.log("VASTAUS_MUUTETTU reducer")
+    const kopio = [...state];
+    const { uusiVastaus, vastauksenIndex, kysymyksenIndex, tenttiIndex } = action.payload;
+    kopio[tenttiIndex].seivataan = true;
+    kopio[tenttiIndex].tenttiItessaan[kysymyksenIndex].vastausvaihtoehdot[vastauksenIndex].vastaus = uusiVastaus;
+    return kopio; }
 
-// case 'VASTAUS_MUUTETTU':
-//   console.log("VASTAUS_MUUTETTU reducer")
-//   const kopio_ = [...state];
-//   const { index: index_, uusiVastaus } = action.payload;
-//   kopio_[tentit].tenttiYksi[index_].vastausvaihtoehdot[index_].vastaus = uusiVastaus;
-//   return kopio_;
-
-    // useEffectin asd
+    // useEffectin redut
     case 'ALUSTA_DATA':
       console.log("alustadata redu")
       return action.payload
 
-    case 'PAIVITA_TALLENNUSTILA':
+    case 'PAIVITA_TALLENNUSTILA': {
       console.log("paivita tallennustila redu");
-      return { ...state, seivataan: action.payload }
+      const kopio = [...state];
+      kopio[0].seivataan = action.payload
+      return kopio }
 
     default:
       throw new Error('err', action.payload, state);
@@ -148,10 +144,9 @@ const MainContent = () => {
       }, []);
 
       useEffect(() => {
-        if(tentit[0].seivataan == true) {
-          console.log("tentin nimi pitäis tallentaa")
-          console.log("tentit:", tentit)
-          localStorage.setItem('tenttidata', JSON.stringify(tentit));
+        if(tentti[0].seivataan == true) {
+          console.log("state tallennetaan")
+          localStorage.setItem('tenttidata', JSON.stringify(tentti));
           dispatch({ type: "PAIVITA_TALLENNUSTILA", payload: false })
         }
       },[tentti[0].seivataan]);

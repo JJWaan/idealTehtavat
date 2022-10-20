@@ -21,24 +21,14 @@ const vastausvaihtoehdot = kysymys.vastausvaihtoehdot.map((item, index) => {
               type: 'VASTAUS_MUUTETTU',
               payload: {
                 uusiVastaus: event.target.value,
-                index: index,
+                vastauksenIndex: index,
+                kysymyksenIndex: kysymyksenIndex,
+                tenttiIndex: tenttiIndex
               },
             });
           }}
         />
 
-          {/* oikea vai väärä vastaus muuttaminen: */}
-        <input onChange={(event) => { dispatch({
-              type: 'OIKEELLISUUS_MUUTETTU',
-              payload: {
-                uusiOikea: event.target.checked,
-                index: index,
-              },
-            });
-          }}
-          type="checkbox"
-          checked={item.uusiOikea}
-        /> Click jos oikea vastaus
       </div>
     );
 });
