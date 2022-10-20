@@ -1,10 +1,12 @@
 // Kysymys komponentti
-const Kysymys = ({ kysymys, dispatch }) => {
-  console.log("vVaihtoehdot:", kysymys.vastausvaihtoehdot)
-  // Array(3) [ {…}, {…}, {…} ]
+const Kysymys = ({ kysymys, dispatch, kysymyksenIndex, tenttiIndex }) => {
 
-  const vastausvaihtoehdot = kysymys.vastausvaihtoehdot.map((item, index) => {
-    console.log("propsi kysymys", kysymys)
+  // console.log("vVaihtoehdot:", kysymys.vastausvaihtoehdot)
+
+
+const vastausvaihtoehdot = kysymys.vastausvaihtoehdot.map((item, index) => {
+    // console.log("kysymys.vastausvaihtoehdot", item);
+    // console.log("kysymys-propsi Tentti-komponentilta", kysymys)
 
     return (
       <div key={index}>
@@ -19,7 +21,7 @@ const Kysymys = ({ kysymys, dispatch }) => {
               type: 'VASTAUS_MUUTETTU',
               payload: {
                 uusiVastaus: event.target.value,
-                index: item.index,
+                index: index,
               },
             });
           }}
@@ -35,28 +37,29 @@ const Kysymys = ({ kysymys, dispatch }) => {
             });
           }}
           type="checkbox"
-          name="onkoOikea"
-          checked={item.onkoOikea}
+          checked={item.uusiOikea}
         /> Click jos oikea vastaus
       </div>
     );
-  });
+});
 
     return (
       <div className="kysymys">
 
           <input className="kysymys-input" type="text"
-            // value={kysymys.kysymys}
+            value={kysymys.kysymys}
             onChange={(event) =>
               dispatch({
                 type: 'KYSYMYS_MUUTETTU',
                 payload: {
                   kysymys: event.target.value,
-                  // index: index,
+                  index: kysymyksenIndex,
+                  tenttiIndex: tenttiIndex
                 },
               })
             }
           />
+
         {vastausvaihtoehdot}
 
       </div>

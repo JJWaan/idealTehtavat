@@ -2,17 +2,24 @@ import Kysymys from "./Kysymys";
 
 // yksittäisen tentin rendaus komponentti
 const Tentti = ({ dispatch, tentti }) => {
-  const kysymykset = tentti.map((item, index) => {
-    console.log("tentti.map itemi", item)
-    console.log("tentti.map index", index)
-    return (
-      <Kysymys
-        key={index}
-        kysymys={item.tenttiYksi}
-        dispatch={dispatch}
-      />
-    );
-});
+
+  // console.log("tentti propsi:", tentti)
+  // tentti propsi: Array [ {…}, {…} ]
+
+  const kysymykset = tentti.map((item, tenttiIndex) => {
+    return (<>
+      {item.tenttiItessaan.map((item, index) => {
+        return (
+          <Kysymys
+            key={index}
+            kysymys={item}
+            dispatch={dispatch}
+            kysymyksenIndex={index}
+            tenttiIndex={tenttiIndex} />
+        )
+      })}
+    </>)
+  })
 
   return (
     <div className="tentti">

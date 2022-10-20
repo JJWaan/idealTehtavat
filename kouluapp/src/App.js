@@ -6,10 +6,8 @@ import { useEffect } from 'react';
 
 
 let oppilas1 = { nimi: "Olli Oppilas" }
-
 let oppilas2 = { nimi: "Mikko Mallikas" }
 let oppilas3 = { nimi: "Kalle Kolmonen" }
-
 
 let luokka1 = {
   nimi: "3A",
@@ -52,8 +50,7 @@ function reducer(state, action) {
 
     case 'ALUSTA_DATA':
       return {...action.payload, tietoAlustettu: true}
-    
-    
+
       default:
       throw new Error("reduceriin tultiin jännällä actionilla");
   }
@@ -66,10 +63,10 @@ function App() {
 //näitä kutsutaan vasta renderöinnin (return) jälkeen
   useEffect(() => {
 //asetetaan paikallinenMuuttuja avainpari-nimellä kouludata
-    let kouludata = localStorage.getItem('kouludata');
+    let paikallinenMuuttuja = localStorage.getItem('kouludata');
 //jos kouludata lyö tyhjää, asetetaan koko koulu_ kouludataan(paikalliseenMuuttujaan)
 //dispatchin payload on se data
-    if(kouludata == null ) {
+    if(paikallinenMuuttuja == null ) {
       console.log("data luettiin vakiosta")
       localStorage.setItem('kouludata', JSON.stringify(koulu_));
       dispatch({ type: "ALUSTA_DATA", payload: koulu_ })
@@ -78,7 +75,7 @@ function App() {
 //(ja parsitaan samantien ettei tule reducerissa ongelmia)
     else {
       console.log("data luettiin local storagesta")
-      dispatch({ type: "ALUSTA_DATA", payload: (JSON.parse(kouludata)) })
+      dispatch({ type: "ALUSTA_DATA", payload: (JSON.parse(paikallinenMuuttuja)) })
     }
 // toi array on riippuvuuslista. sinne voi tallentaa tiloja
   }, []);
