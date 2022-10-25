@@ -13,8 +13,25 @@ p {
 
 .outer-wrapper {
   display: flex;
-  flex: 1;
+  flex-wrap: wrap;
   padding: 1rem;
+}
+
+.chuck-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+.chuck-button {
+  padding: 1rem;
+  margin: 0.5rem;
+  border: 0.1em dotted #cbd
+}
+
+.chuck-button:hover {
+  background-color: #cee;
 }
 
 .chuck-categories {
@@ -31,6 +48,6 @@ p {
 
 .ui-info-box {
   padding: 1rem;
-  margin: 1rem;
+  margin: 0.5rem;
   border: 0.1em dotted #aaa;
 }
