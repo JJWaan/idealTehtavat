@@ -41,6 +41,7 @@ function reducer(state, action) {
       console.log("state: autofetching")
       return { ...state,
         // noutoAloitettu: true,
+        timeri: action.payload,
         auto5: true }
 
     case 'NOUTO_EPÄONNISTUI':
@@ -62,7 +63,8 @@ function ChuckJokes() {
     noutoAloitettu: false,
     noutoEpäonnistui: false,
     noutoValmis: false,
-    auto5: false });
+    auto5: false,
+    timeri: {} });
 
   // main useEffect
   useEffect(() => {
@@ -79,11 +81,9 @@ function ChuckJokes() {
         dispatch({ type: 'V_NOUTO_ALOITETTU' })
         // haetaan api:sta random vitsi (objekti) joke-muuttujalle
           let joke = await axios('https://api.chucknorris.io/jokes/random');
-        // vitsi itessään lähetään payloadina reducerille (payload: joke.data.value)
-        // upd: napataan koko joke objektiksi
+        // koko joke ({}) payloadina reducerin vitsiObjektiin
         dispatch({ type: 'V_NOUDETTU', payload: joke })
           // console.log("noudettu vitsi json:", joke)
-          // console.log("joke.data.value:", joke.data.value)
       }
       catch (error) {
         console.log("Los Proplemos:", error)
@@ -94,16 +94,16 @@ function ChuckJokes() {
   }, []);
   // end main useEffect
 
-  // auto5sec joke fetch
+  // auto5sec joke fetch (unable to call f inside useEffect?)
   useEffect(() => {
-    appData.auto5 == true ? timeri : null;
-  }, []);
-
-  const timeri = () => {
-    setInterval(getRandomJK, 5000);
-  };
-
-  // clearInterval(timeri);
+    let timeri;
+    async function autofetchJK() {
+      // appData.auto5 == true ? timeri : null;
+      if(appData.auto5 == true) { timeri = setInterval(getRandomJK, 5000); }
+    }
+    autofetchJK();
+    return clearInterval(timeri);
+  }, [appData.auto5]);
 
   // onClick funktiot:
   async function getRandomJK() {
@@ -124,47 +124,40 @@ function ChuckJokes() {
   return (
     <>
       <div className='outer-wrapper'>
-
         <div className='chuck-wrapper'>
-
           <div className='chuck-button'
             onClick={() => {
               getRandomJK();
               console.log("random joke div click")
             }}
-            >
-            get a random joke
+            >get a random joke
           </div>
 
           <div className='chuck-button'
             onClick={() => {
-              dispatch({ type: 'AUTOFETCH', payload: timeri })
+              autofetchJK();
+              dispatch({ type: 'AUTOFETCH', payload: timeri }) // error
               console.log("new joke 5s div click")
             }}
-            >
-            new joke every 5 secs
+            >new joke every 5 secs
           </div>
 
           <div className='chuck-button'
             onClick={() => {
               console.log("localSto div click")
             }}
-            >
-            jokes from localStorage
+            >jokes from localStorage
           </div>
 
           <div className='chuck-button'
             onClick={() => {
               console.log("challenge div click")
             }}
-            >
-            time challenge
+            >time challenge
           </div>
-
         </div>
 
         <div className='chuck-wrapper'>
-
           <div className='chuck-categories'>
             <h3>Chuck Categories:</h3>
               {appData.kategoriat.map(item => <p>{item}</p>)}
@@ -190,9 +183,7 @@ function ChuckJokes() {
             {appData.noutoEpäonnistui && "UI notification: Nouto epäonnistui" }
             {appData.noutoValmis && "UI notification: Nouto on valmis" }
           </div>
-
         </div>
-
       </div>
     </>
   );

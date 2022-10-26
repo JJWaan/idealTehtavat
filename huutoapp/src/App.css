@@ -27,7 +27,8 @@ p {
 .chuck-button {
   padding: 1rem;
   margin: 0.5rem;
-  border: 0.1em dotted #cbd
+  border: 0.1em dotted #cbd;
+  border-radius: 10%;
 }
 
 .chuck-button:hover {
@@ -38,16 +39,19 @@ p {
   padding: 1rem;
   margin: 0.5rem;
   border: 0.1em dotted #a1a;
+  border-radius: 10%;
 }
 
 .chuck-joke {
   padding: 1rem;
   margin: 0.5rem;
   border: 0.1em dotted rgb(33, 144, 8);
+  border-radius: 10%;
 }
 
 .ui-info-box {
   padding: 1rem;
   margin: 0.5rem;
   border: 0.1em dotted #aaa;
+  border-radius: 10%;
 }
