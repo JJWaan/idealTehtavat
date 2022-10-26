@@ -1,9 +1,7 @@
 import Kysymys from "./Kysymys";
 
 // yksittäisen tentin rendaus komponentti
-const Tentti = ({ dispatch, tentti }) => {
-
-  // console.log("tentti propsi:", tentti)
+const Tentti = ({ tentti, dispatch }) => {
 
   const kysymykset = tentti.map((item, tenttiIndex) => {
     return (<>

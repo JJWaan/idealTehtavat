@@ -5,6 +5,7 @@ import Navbar from './Navbar';
 import Footer from './FooterElement';
 
 import MainContent from './TenttiEtusivu';
+import MainContentWithServer from './TenttiEtusivuWithServer';
 
 function App() {
   return (
@@ -12,7 +13,7 @@ function App() {
       <div className='main-flex-container'>
         <Header />
         <Navbar />
-        <MainContent />
+        <MainContentWithServer />
         <Footer />
       </div>
     </>
