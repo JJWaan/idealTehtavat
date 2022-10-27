@@ -2,7 +2,7 @@ import Kysymys from "./Kysymys";
 
 // yksittäisen tentin rendaus komponentti
 const Tentti = ({ tentti, dispatch }) => {
-
+  console.log("käytiin tentti.js:ssä", tentti);
   const kysymykset = tentti.map((item, tenttiIndex) => {
     return (<>
       {

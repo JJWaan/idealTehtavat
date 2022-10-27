@@ -8,10 +8,10 @@ app.use(cors());
 app.use(express.json());
 
 // GET from server
-app.get('/', (res) => {
+app.get('/', (req, res) => {
   const data = fs.readFileSync('tenttidata.json')
   console.log("get tenttidata")
-  res.send(JSON.parse(data))
+  res.send(data)
 })
 
 // POST , write to server file
