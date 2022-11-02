@@ -24,6 +24,7 @@ const haeNimi = async () => {
     console.log("selected, command:", result.command);
     console.log("selected, rowCount:", result.rowCount);
   } catch (error) { console.log("select Err:", error) }
+  pool.end();
 }
 // haeNimi();
 
@@ -36,6 +37,7 @@ const haeID = async () => {
     console.log("selected, command:", result.command);
     console.log("selected, rowCount:", result.rowCount);
   } catch (error) { console.log("select Err:", err) }
+  pool.end();
 }
 // haeID();
 
@@ -47,6 +49,7 @@ const aakkosValue = async () => {
     console.log("selected, command:", result.command);
     console.log("selected, rowCount:", result.rowCount);
   } catch (error) { console.log("select Err:", error) }
+  pool.end();
 }
 // aakkosValue();
 
@@ -58,6 +61,7 @@ const haeTiettyja = async () => {
     console.log("selected, command:", result.command);
     console.log("selected, rowCount:", result.rowCount);
   } catch (error) { console.log("select Err:", error) }
+  pool.end();
 }
 // haeTiettyja();
 
@@ -69,6 +73,7 @@ const haeMuttaEiNaita = async () => {
     console.log("selected, command:", result.command);
     console.log("selected, rowCount:", result.rowCount);
   } catch (error) { console.log("select Err:", error) }
+  pool.end();
 }
 // haeMuttaEiNaita();
 
@@ -80,6 +85,7 @@ const lisaaValue = async () => {
     console.log("insert command:", result.command)
     console.log("insert rowCount:", result.rowCount)
   } catch (error) { console.log("insert into Err:", error) }
+  pool.end();
 }
 // lisaaValue();
 
@@ -90,6 +96,7 @@ const poistaValue = async () => {
     console.log("deleted from backend, command:", result.command)
     console.log("deleted from backend, rowCount:", result.rowCount)
   } catch (error) { console.log("delete from where id=x Err:", error) }
+  pool.end();
 }
 // poistaValue();
 
@@ -101,6 +108,7 @@ const updateValue = async () => {
     console.log("updated, command:", result.command)
     console.log("updated, rowCount:", result.rowCount)
   } catch (error) { console.log("update where id=x Err:", error) }
+  pool.end();
 }
 // updateValue();
 
@@ -110,6 +118,7 @@ const lisaaKolumni = async () => {
     await pool.query("ALTER TABLE tentti_backend ADD totta_vai_tarua boolean")
     console.log("altered table succesfully");
   } catch (error) { console.log("failed to alter table:", error); }
+  pool.end();
 }
 // lisaaKolumni();
 
@@ -120,6 +129,7 @@ const asetaBoolean = async () => {
     await pool.query("UPDATE tentti_backend SET totta_vai_tarua = '0'")
     console.log("booleans updated succesfully");
   } catch (error) { console.log("update boolean error:", error); }
+  pool.end();
 }
 // asetaBoolean();
 
@@ -129,6 +139,7 @@ const asetaTiettyBoolean = async () => {
     await pool.query("UPDATE tentti_backend SET totta_vai_tarua = '1' WHERE id=9")
     console.log("single boolean updated succesfully");
   } catch (error) { console.log("update boolean error:", error); }
+  pool.end();
 }
 // asetaTiettyBoolean();
 
@@ -138,6 +149,7 @@ const haeFalse = async () => {
     let result = await pool.query("SELECT * FROM tentti_backend WHERE totta_vai_tarua='0'")
     console.log("boolean=false :", result.rows);
   } catch (error) { console.log("select Err", error); }
+  pool.end();
 }
 // haeFalse();
 
@@ -149,8 +161,9 @@ const haePVM = async () => {
     console.log("selected, command:", result.command);
     console.log("selected, rowCount:", result.rowCount);
   } catch (error) { console.log("select Err:", error); }
+  pool.end();
 }
-haePVM();
+// haePVM();
 
   // Vaihda tiettyä pvm:ää, id:n perusteella
 const asetaPVM = async () => {
@@ -158,8 +171,11 @@ const asetaPVM = async () => {
     await pool.query("UPDATE tentti_backend SET pvm = '1.10.1989' WHERE id=7")
     console.log("single date updated succesfully");
   } catch (error) { console.log("update date error:", error); }
+  pool.end();
 }
 // asetaPVM();
+
+
 
 // --- --- ---
 // notes:
