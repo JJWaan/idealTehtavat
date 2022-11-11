@@ -23,7 +23,7 @@ app.listen(port, () => { console.log(`listening on port ${port}`); });
 funktiot.poolStats();
 
 app.get('/', funktiot.getData);
-app.get('/:id/', funktiot.getDataFromID);
+app.get('/:id/', funktiot.getData);
 app.post('/', funktiot.addData);
 app.put('/:id', funktiot.updateData);
 app.delete('/:id', funktiot.deleteData);

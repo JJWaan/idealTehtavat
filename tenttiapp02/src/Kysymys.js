@@ -1,32 +1,29 @@
 // Kysymys komponentti
 const Kysymys = ({ kysymys, dispatch, kysymyksenIndex, tenttiIndex }) => {
-
-  // console.log("vVaihtoehdot:", kysymys.vastausvaihtoehdot)
-
-
-const vastausvaihtoehdot = kysymys.vastausvaihtoehdot.map((item, index) => {
+  const vastausvaihtoehdot = kysymys.vastausvaihtoehdot.map((item, index) => {
+    // console.log("vVaihtoehdot:", kysymys.vastausvaihtoehdot)
     // console.log("kysymys.vastausvaihtoehdot", item);
     // console.log("kysymys-propsi Tentti-komponentilta", kysymys)
 
     return (
-      <div key={index}>
+      <div key={index} className="kysymysJarkko">
 
         <input type="radio" value={item.vastaus} name="kysymys" />
 
           {/* vastauksen editointi: */}
-        <input className="vastaus-input"
-          type="text"
-          value={item.vastaus}
-          onChange={(event) => { dispatch({
-              type: 'VASTAUS_MUUTETTU',
-              payload: {
-                uusiVastaus: event.target.value,
-                vastauksenIndex: index,
-                kysymyksenIndex: kysymyksenIndex,
-                tenttiIndex: tenttiIndex
-              },
-            });
-          }}
+          <input className="vastaus-input"
+            type="text"
+            value={item.vastaus}
+            onChange={(event) => { dispatch({
+                type: 'VASTAUS_MUUTETTU',
+                payload: {
+                  uusiVastaus: event.target.value,
+                  vastauksenIndex: index,
+                  kysymyksenIndex: kysymyksenIndex,
+                  tenttiIndex: tenttiIndex
+                },
+              });
+            }}
         />
 
       </div>

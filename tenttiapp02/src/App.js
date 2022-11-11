@@ -4,8 +4,9 @@ import Header from './HeaderElement';
 import Navbar from './Navbar';
 import Footer from './FooterElement';
 
-import MainContent from './TenttiEtusivu';
+// import MainContent from './TenttiEtusivu';
 import MainContentWithServer from './TenttiEtusivuWithServer';
+// import MainContentWithServerAndDB from './TenttiEtusivuWithServerAndDatabase';
 
 function App() {
   return (

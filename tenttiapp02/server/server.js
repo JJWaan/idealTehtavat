@@ -1,23 +1,26 @@
 const fs = require('fs');
+
 const express = require('express'); // (npm i express)
-const cors = require('cors') // (npm i cors)
+app.use(express.json());
+
 const app = express();
 const port = 8080;
 
-app.use(cors());
-app.use(express.json());
+// lokaalit hommat. tätä käytetään tällä periaatteella
+// selaimen muisti(i)n lukemiseen && kirjoittamiseen
 
-// GET from server
+// GET, via server from (local file) tenttidata.json
 app.get('/', (req, res) => {
   const data = fs.readFileSync('tenttidata.json')
   console.log("get tenttidata")
   res.send(data)
 })
 
-// POST , write to server file
+// POST, write via server to (local file) tenttidata.json
 app.post('/', (req, res) => {
   console.log("post to tenttidata")
   fs.writeFileSync('tenttidata.json', JSON.stringify(req.body))
+  // server response:
   res.send('data written to file')
 })
 

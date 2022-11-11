@@ -21,6 +21,21 @@ const poolStats = async () => {
 
 // get, sql select from db
 const getData = async (request, response) => {
+    if (request.params) {
+        const { id } = request.params
+        const sqlCommand = "SELECT * FROM oma_taulu WHERE id=($1)"
+        try {
+            let result = await pool.query(sqlCommand, [id])
+            response.status(200).send(result);
+            console.log('Query complete');
+            return;
+        } catch (error) {
+            response.status(404).send('Not found')
+            console.log('Query failed:', error);
+        }
+        pool.end(() => { console.log('pool ended') })
+    };
+
     const sqlCommand = "SELECT * FROM oma_taulu"
     try {
         let stuff = await pool.query(sqlCommand)
@@ -28,19 +43,8 @@ const getData = async (request, response) => {
         console.log('Query complete');
     } catch (error) {
         response.status(404).send('Not found')
-        console.log('Query error:', error);
+        console.log('Query failed:', error);
     }
-    pool.end(() => { console.log('pool ended') })
-};
-//get based on id param
-const getDataFromID = async (request, response) => {
-    const { id } = request.params
-    const sqlCommand = "SELECT * FROM oma_taulu WHERE id=($1)"
-    try {
-        let stuff = await pool.query(sqlCommand, [id])
-        response.status(200).send(stuff);
-        console.log('Query complete');
-    } catch (error) { response.status(404).send('Not found') }
     pool.end(() => { console.log('pool ended') })
 };
 
@@ -59,13 +63,17 @@ const addData = async (request, response) => {
 
 // update data
 const updateData = async (request, response) => {
+    if (!request.body || request.body.length < 1 || !request.params) {
+        response.status(400).send('Bad request')
+        return;
+    }
     const { teksti } = request.body
     const { id } = request.params
     const sqlCommand = "UPDATE oma_taulu SET teksti=($1) WHERE id=($2)"
     const values = [teksti, id]
     try {
         await pool.query(sqlCommand, values)
-        response.status(201).send('jee');
+        response.status(201).send('Data updated succesfully');
         console.log('Data updated');
     } catch (error) { response.status(404).send('Not found') }
     pool.end(() => { console.log('pool ended') })
@@ -87,8 +95,7 @@ const deleteData = async (request, response) => {
 module.exports = {
     poolStats,
     getData,
-    getDataFromID,
-    updateData,
     addData,
+    updateData,
     deleteData,
 };

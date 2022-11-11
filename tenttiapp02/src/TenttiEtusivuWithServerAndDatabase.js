@@ -51,7 +51,7 @@ const reducer = (state, action) => {
 };
 
 // m a i n  c o m p o n e n t :
-const MainContentWithServer = () => {
+const MainContentWithServerAndDB = () => {
   const [tentti, dispatch] = useReducer(reducer, appiukko);
   // console.log("mis mennää, state nyt:", tentti);
   useEffect(() => {
@@ -84,7 +84,7 @@ const MainContentWithServer = () => {
 
   const LoadingScreen = () => {
     console.log("käytiin loading screenissä")
-    return <div>loading screeni</div>
+    return <div className="loading-screen-bg">loading screeni</div>
   };
 
   return (
@@ -97,4 +97,4 @@ const MainContentWithServer = () => {
   );
 };
 
-export default MainContentWithServer;
+export default MainContentWithServerAndDB;
