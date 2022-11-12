@@ -1,9 +1,11 @@
+const { response } = require('express');
+const { appendFile } = require('fs');
 const { Pool, Client } = require('pg');
 
 const pool = new Pool({
     user: 'postgres',
     host: 'localhost',
-    database: 'oma_db',
+    database: 'tenttisovellus_db',
     password: 'admin',
     port: 5432,
     idleTimeoutMillis: 8000,
@@ -34,29 +36,31 @@ const poolStats = async () => {
 
 // get, sql select from db
 const getData = async (request, response) => {
-    if (request.params) {
-        const { id } = request.params
-        const sqlCommand = "SELECT * FROM oma_taulu WHERE id=($1)"
+    const { id } = request.params
+    if (request.params.id) {
         try {
-            let result = await client.query(sqlCommand, [id])
-            response.status(200).send(result);
-            console.log('Query complete');
+            const sqlCommand = "SELECT * FROM tentti WHERE tentti_id=($1)"
+            let result = await pool.query(sqlCommand, [id])
+            response.status(200).json(result);
+            console.log(`Query ${result.command} complete for id ${request.params.id}`);
         } catch (error) {
-            response.status(404).send('Not found')
-            console.log('Query failed:', error);
+            response.status(404).send('Caught error with get/select query:', error)
+            console.error(error.message);
         }
         pool.end(() => { console.log('pool ended') })
         return;
-    };
-
-    const sqlCommand = "SELECT * FROM oma_taulu"
+    }
+    // else {
+    //     response.status(400).json({message: `No data with id of ${request.params.id}`})
+    // }
     try {
-        let result = await client.query(sqlCommand)
+        const sqlCommand = "SELECT * FROM tentti"
+        let result = await pool.query(sqlCommand)
         response.status(200).send(result);
-        console.log('Query complete');
+        console.log(`Query ${result.command} completed succesfully`);
     } catch (error) {
-        response.status(404).send('Not found')
-        console.log('Query failed:', error);
+        response.status(404).send('Caught error with get/select query:', error)
+        console.error(error.message);
     }
     pool.end(() => { console.log('pool ended') })
 };
@@ -64,13 +68,13 @@ const getData = async (request, response) => {
 // add data
 const addData = async (request, response) => {
     const { teksti } = request.body
-    const sqlCommand = "INSERT INTO oma_taulu (teksti) VALUES ($1)"
+    const sqlCommand = "INSERT INTO tentti (tentti_nimi) VALUES ($1) RETURNING *"
     const values = [teksti]
     try {
         await pool.query(sqlCommand, values)
-        response.status(201).send('Data inserted succesfully');
+        response.status(201).send('Data inserted succesfully:', values);
         console.log('Data written');
-    } catch (error) { response.status(404).send('Not found') }
+    } catch (error) { response.send('Not found', error) }
     pool.end(() => { console.log('pool ended') })
 };
 
@@ -78,15 +82,15 @@ const addData = async (request, response) => {
 const updateData = async (request, response) => {
     try {
         if (!request.body.teksti || request.body.teksti.length < 1) {
-            response.status(400).send('Bad request, "teksti" is needed')
+            response.status(400).send('"teksti" is needed in the body')
             return;
         }
         const { teksti } = request.body
         const { id } = request.params
-        const sqlCommand = "UPDATE oma_taulu SET teksti=($1) WHERE id=($2)"
+        const sqlCommand = "UPDATE tentti SET teksti=($1) WHERE id=($2)"
         const values = [teksti, id]
         await pool.query(sqlCommand, values)
-        response.status(201).send('Data updated succesfully');
+        response.status(201).send(`Data updated succesfully with '${teksti}' by id # ${id}`);
         console.log('Data updated');
     } catch (error) { response.status(404).send('Not found') }
     pool.end(() => { console.log('pool ended') })
@@ -95,14 +99,27 @@ const updateData = async (request, response) => {
 // delete data
 const deleteData = async (request, response) => {
     const { id } = request.params
-    const sqlCommand = "DELETE FROM oma_taulu WHERE id=($1)"
+    const sqlCommand = "DELETE FROM tentti WHERE id=($1)"
     try {
         await pool.query(sqlCommand, [id])
-        response.status(201).send('Deleted by id #');
+        response.status(201).send(`Deleted id # ${id} succesfully`);
         console.log('Data deleted');
     } catch (error) { response.status(404).send('Not found') }
     pool.end(() => { console.log('pool ended') })
 };
+
+// login form placeholder
+const loginPost = async (request, response) => {
+    if (!request.header('x-auth-token')) {
+        return response.status(400).send('No auth token')
+    }
+
+    if (request.header('x-auth-token') !== '1234') {
+        return response.status(401).send('Unauthorized')
+    }
+
+    response.status().send('Logged in')
+}
 
 // export
 module.exports = {
@@ -111,4 +128,5 @@ module.exports = {
     addData,
     updateData,
     deleteData,
+    loginPost,
 };

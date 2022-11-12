@@ -5,8 +5,8 @@ import Navbar from './Navbar';
 import Footer from './FooterElement';
 
 // import MainContent from './TenttiEtusivu';
-import MainContentWithServer from './TenttiEtusivuWithServer';
-// import MainContentWithServerAndDB from './TenttiEtusivuWithServerAndDatabase';
+// import MainContentWithServer from './TenttiEtusivuWithServer';
+import MainContentWithServerAndDB from './TenttiEtusivuWithServerAndDatabase';
 
 function App() {
   return (
@@ -14,7 +14,7 @@ function App() {
       <div className='main-flex-container'>
         <Header />
         <Navbar />
-        <MainContentWithServer />
+        <MainContentWithServerAndDB />
         <Footer />
       </div>
     </>
