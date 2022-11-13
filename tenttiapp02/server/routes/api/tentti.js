@@ -1,38 +1,4 @@
-const { Pool, Client } = require('pg');
-
-const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'tenttisovellus_db',
-    password: 'admin',
-    port: 5432,
-    idleTimeoutMillis: 8000,
-    connectionTimeoutMillis: 2000,
-    max: 20,
-    // allowExitOnIdle: true,
-});
-
-// const client = new Client({
-//     host: 'localhost',
-//     database: 'oma_db',
-//     user: 'postgres',
-//     password: 'admin',
-//     port: 5432,
-// });
-
-// client.connect(err => {
-//     if (err) { console.error('client connection error', err.stack)
-//     } else { console.log('client connected') }
-// });
-
-// pool statistics, properties
-const poolStats = async () => {
-    console.log('# of total clients existing in pool:', pool.totalCount)
-    console.log('# of total clients idle in pool:', pool.idleCount)
-    console.log('# of queued requests:', pool.waitingCount)
-};
-
-// get, sql select from db
+// get tentti, sql select from db
 const getData = async (request, response) => {
     const { id } = request.params
     if (request.params.id) {
@@ -63,7 +29,7 @@ const getData = async (request, response) => {
     pool.end(() => { console.log('pool ended') })
 };
 
-// add data
+// add data (tentti)
 const addData = async (request, response) => {
     const { teksti } = request.body
     const sqlCommand = "INSERT INTO tentti (tentti_nimi) VALUES ($1) RETURNING *"
@@ -76,7 +42,7 @@ const addData = async (request, response) => {
     pool.end(() => { console.log('pool ended') })
 };
 
-// update data
+// update data (tentti)
 const updateData = async (request, response) => {
     try {
         if (!request.body.teksti || request.body.teksti.length < 1) {
@@ -94,7 +60,7 @@ const updateData = async (request, response) => {
     pool.end(() => { console.log('pool ended') })
 };
 
-// delete data
+// delete data (tentti)
 const deleteData = async (request, response) => {
     const { id } = request.params
     const sqlCommand = "DELETE FROM tentti WHERE id=($1)"
@@ -104,27 +70,4 @@ const deleteData = async (request, response) => {
         console.log('Data deleted');
     } catch (error) { response.status(404).send('Not found') }
     pool.end(() => { console.log('pool ended') })
-};
-
-// login form placeholder
-const loginPost = async (request, response) => {
-    if (!request.header('x-auth-token')) {
-        return response.status(400).send('No auth token')
-    }
-
-    if (request.header('x-auth-token') !== '1234') {
-        return response.status(401).send('Unauthorized')
-    }
-
-    response.status().send('Logged in')
-}
-
-// export
-module.exports = {
-    poolStats,
-    getData,
-    addData,
-    updateData,
-    deleteData,
-    loginPost,
 };

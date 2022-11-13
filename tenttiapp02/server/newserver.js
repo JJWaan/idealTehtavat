@@ -26,11 +26,25 @@ const funktiot = require('./newserverqueries');
 const logger = (request, response, next) => {
     console.log('Query made to:')
     console.log(`${request.protocol}://${request.get('host')}`);
+    console.log('Original:', request.originalUrl);
     next();
 };
-// init middleware, logger
+// init middleware, "logger()"
 app.use(logger);
 
+const auth = (request, response, next) => {
+    console.log("authed, this is a placeholder");
+    if (request.query.isAdmin === 'true') {
+        next();
+        return; // needed because "next()"
+        // next calls the next middleware
+    }
+    response.send('Not authorized')
+};
+// init "auth()"
+app.use(auth);
+
+// port variable listener
 app.listen(port, () => { console.log(`server on port ${port}`); });
 
 // init pool statistics
