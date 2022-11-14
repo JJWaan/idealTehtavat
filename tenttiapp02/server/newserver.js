@@ -18,9 +18,23 @@ const port = process.env.PORT || 8080;
 // otherwise use arbitrary number (8080) for a dev machine
 
 // static page
-app.use(express.static('public'));
+// app.use(express.static('public'));
 
-const funktiot = require('./newserverqueries');
+// routes:
+const tenttiRoute = require('./routes/api/tentti');
+// const kysymysRoute = require('./routes/api/kysymys');
+// const vaihtoehtoRoute = require('./routes/api/vaihtoehto');
+
+app.use('/tentti', tenttiRoute);
+// app.use('/kysymys', kysymysRoute);
+// app.use('/vaihtoehto', vaihtoehtoRoute);
+
+// (deprecated, not used anymore:)
+// const funktiot = require('./newserverqueries');
+
+// pool statistics
+const statsit = require('../config/databaseconfig')
+statsit.poolStats();
 
 // logger function to log url
 const logger = (request, response, next) => {
@@ -32,29 +46,26 @@ const logger = (request, response, next) => {
 // init middleware, "logger()"
 app.use(logger);
 
-const auth = (request, response, next) => {
-    console.log("authed, this is a placeholder");
-    if (request.query.isAdmin === 'true') {
-        next();
-        return; // needed because "next()"
-        // next calls the next middleware
-    }
-    response.send('Not authorized')
-};
+// const auth = (request, response, next) => {
+//     console.log("authed, this is a placeholder");
+//     if (request.query.isAdmin === 'true') {
+//         next();
+//         return; // needed because "next()"
+//         // next calls the next middleware
+//     }
+//     response.send('Not authorized')
+// };
 // init "auth()"
-app.use(auth);
+// app.use(auth);
 
 // port variable listener
 app.listen(port, () => { console.log(`server on port ${port}`); });
 
-// init pool statistics
-funktiot.poolStats();
+// routes (deprecated)
+// app.get('/', funktiot.getData);
+// app.get('/:id/', funktiot.getData);
+// app.post('/', funktiot.addData);
+// app.put('/:id', funktiot.updateData);
+// app.delete('/:id', funktiot.deleteData);
 
-// routes
-app.get('/', funktiot.getData);
-app.get('/:id/', funktiot.getData);
-app.post('/', funktiot.addData);
-app.put('/:id', funktiot.updateData);
-app.delete('/:id', funktiot.deleteData);
-
-app.post('/login', funktiot.loginPost)
+// app.post('/login', funktiot.loginPost);

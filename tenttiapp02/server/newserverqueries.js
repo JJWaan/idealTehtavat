@@ -120,11 +120,11 @@ const loginPost = async (request, response) => {
 }
 
 // export
-module.exports = {
-    poolStats,
-    getData,
-    addData,
-    updateData,
-    deleteData,
-    loginPost,
-};
+// module.exports = {
+//     poolStats,
+//     getData,
+//     addData,
+//     updateData,
+//     deleteData,
+//     loginPost,
+// };
