@@ -32,6 +32,9 @@ const poolStats = async () => {
     console.log('# of queued requests:', pool.waitingCount)
 };
 
+//
+// these were the query functions pre-router:
+
 // get, sql select from db
 const getData = async (request, response) => {
     const { id } = request.params

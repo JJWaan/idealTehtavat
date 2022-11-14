@@ -22,29 +22,24 @@ const port = process.env.PORT || 8080;
 
 // routes:
 const tenttiRoute = require('./routes/api/tentti');
-// const kysymysRoute = require('./routes/api/kysymys');
-// const vaihtoehtoRoute = require('./routes/api/vaihtoehto');
+const kysymysRoute = require('./routes/api/kysymys');
+const vaihtoehtoRoute = require('./routes/api/vaihtoehto');
 
 app.use('/tentti', tenttiRoute);
-// app.use('/kysymys', kysymysRoute);
-// app.use('/vaihtoehto', vaihtoehtoRoute);
+app.use('/kysymys', kysymysRoute);
+app.use('/vaihtoehto', vaihtoehtoRoute);
 
 // (deprecated, not used anymore:)
 // const funktiot = require('./newserverqueries');
 
-// pool statistics
-const statsit = require('../config/databaseconfig')
-statsit.poolStats();
+// routes (deprecated, not used anymore)
+// app.get('/', funktiot.getData);
+// app.get('/:id/', funktiot.getData);
+// app.post('/', funktiot.addData);
+// app.put('/:id', funktiot.updateData);
+// app.delete('/:id', funktiot.deleteData);
 
-// logger function to log url
-const logger = (request, response, next) => {
-    console.log('Query made to:')
-    console.log(`${request.protocol}://${request.get('host')}`);
-    console.log('Original:', request.originalUrl);
-    next();
-};
-// init middleware, "logger()"
-app.use(logger);
+// app.post('/login', funktiot.loginPost);
 
 // const auth = (request, response, next) => {
 //     console.log("authed, this is a placeholder");
@@ -58,14 +53,18 @@ app.use(logger);
 // init "auth()"
 // app.use(auth);
 
+// pool statistics
+// const statsit = require('../config/databaseconfig')
+// statsit.poolStats();
+
+// logger function to log url
+const logger = (request, response, next) => {
+    console.log('Query made to:')
+    console.log(`${request.protocol}://${request.get('host')}`);
+    console.log('Original:', request.originalUrl);
+    next();
+};
+app.use(logger);
+
 // port variable listener
 app.listen(port, () => { console.log(`server on port ${port}`); });
-
-// routes (deprecated)
-// app.get('/', funktiot.getData);
-// app.get('/:id/', funktiot.getData);
-// app.post('/', funktiot.addData);
-// app.put('/:id', funktiot.updateData);
-// app.delete('/:id', funktiot.deleteData);
-
-// app.post('/login', funktiot.loginPost);
