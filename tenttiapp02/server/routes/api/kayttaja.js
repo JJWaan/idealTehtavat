@@ -23,7 +23,7 @@ router.get('/:id', async (request, response) => {
         try {
             const sqlCommand = "SELECT * FROM kayttaja WHERE kayttaja_id=($1)";
             let result = await pool.postgrePool().query(sqlCommand, [id]);
-            response.status(200).json(result.rows);
+            response.status(200).send(result.rows);
             console.log(`Query ${result.command} complete for id ${request.params.id}`);
         } catch (error) {
             response.status(404).send(`Caught error with ${request.command} query:`, error.message);
@@ -83,9 +83,9 @@ router.delete('/:id', async (request, response) => {
         const sqlCommand = "DELETE FROM kayttaja WHERE kayttaja_id=($1)";
         await pool.postgrePool().query(sqlCommand, values);
         response.status(201).send(`Deleted id # ${id} succesfully`);
-        // console.log(`Query ${result.command} complete for id ${request.params.id}`);
+        console.log(`Deleted kayttaja id ${request.params.id}`);
     } catch (error) {
-        response.status(404).send('Not found');
+        response.status(404).send('Caught error');
         console.error(error);
     }
     // pool.end(() => { console.log('pool ended') });
