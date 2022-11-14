@@ -20,14 +20,16 @@ const port = process.env.PORT || 8080;
 // static page
 // app.use(express.static('public'));
 
-// routes:
+// express router routes:
 const tenttiRoute = require('./routes/api/tentti');
 const kysymysRoute = require('./routes/api/kysymys');
 const vaihtoehtoRoute = require('./routes/api/vaihtoehto');
+const kayttajaRoute = require('./routes/api/kayttaja');
 
 app.use('/tentti', tenttiRoute);
 app.use('/kysymys', kysymysRoute);
 app.use('/vaihtoehto', vaihtoehtoRoute);
+app.use('/kayttaja', kayttajaRoute);
 
 // (deprecated, not used anymore:)
 // const funktiot = require('./newserverqueries');
