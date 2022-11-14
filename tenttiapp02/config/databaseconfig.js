@@ -30,4 +30,4 @@ const poolStats = async () => {
 };
 
 
-module.exports = { postgrePool, poolStats };
+module.exports = { postgrePool, poolStats,  };
