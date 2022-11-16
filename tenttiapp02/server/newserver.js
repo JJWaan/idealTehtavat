@@ -1,13 +1,10 @@
 const express = require('express');
 const app = express();
-
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true, }));
-
 const cors = require('cors');
 app.use(cors());
-
 const port = process.env.PORT || 8080;
 // environment variable. commandline with
 // export PORT=5000 (set PORT=5000 for windows)
@@ -20,6 +17,119 @@ const port = process.env.PORT || 8080;
 // static page
 // app.use(express.static('public'));
 
+const jwt = require("jsonwebtoken");
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
+//
+
+let password = "salasana"
+let email = "vilho@gmail.com"
+
+//
+// Signup
+app.post("/signup", async (req, res, next) => {
+    const { email, password } = req.body;
+    let result; 
+    try {
+        let hashed = await bcrypt.hash(password, saltRounds)
+        result = await pool.query(
+            "INSERT INTO kayttaja (user_email, user_password) VALUES ($1,$2) RETURNING user_id", [email, hashed]);
+    } catch (error) {
+        console.error(error);
+        return next();
+    }
+    let token;
+    try {
+        token = jwt.sign(
+            { userId: result.rows[0].id, email: email },
+            "secretkeyappearshere",
+            { expiresIn: "1h" }
+        );
+    } catch (error) {
+        console.error(error)
+        return next();
+    }
+    res.status(201).json({
+        success: true,
+        data: {
+            userId: result.rows[0].id,
+            email: email,
+            token: token
+        }
+    });
+});
+
+//
+// Login
+app.post("/login", async (req, res, next) => {
+    let { email, password } = req.body;
+    let passwordMatch=false;
+    let existingUser;
+    try {
+        // existingUser = await User.findOne({ email: email });
+        let result = await pool.query ("SELECT * FROM kayttaja where user_email=$1", [email])
+        existingUser = {
+            password: result.rows[0].password,
+            email: result.rows[0].email,
+            id: result.rows[0].id
+        };
+        passwordMatch = await bcrypt.compare(password, existingUser.password)
+    } catch {
+        console.error(error);
+        return next();
+    }
+
+    if (!passwordMatch) {
+        const error = Error("Wrong details please check at once");
+        return next(error);
+    }
+
+    let token;
+    try {
+    //Creating jwt token
+        token = jwt.sign(
+            { userId: existingUser.id, email: existingUser.email },
+            "secretkeyappearshere",    //.env
+            { expiresIn: "1h" }
+        );
+    } catch (error) {
+        console.log(error);
+        return next();
+    }
+ 
+    res.status(200).json({
+        success: true,
+        data: {
+        userId: existingUser.id,
+        email: existingUser.email,
+        token: token,
+        },
+    });
+});
+
+// Verifiointi func
+const verifyToken = (req, res, next) =>{
+    const token = req.headers.authorization?.split(' ')[1]; 
+    //Authorization: 'bearer TOKEN'
+    if(!token) {
+        res.status(200).json({success: false, message: "Error: Token was not provided."});
+    };
+    //Decoding the token
+    const decodedToken = jwt.verify(token,"secretkeyappearshere");
+    req.decoded = decodedToken;
+    next();
+};
+
+app.use(verifyToken) // Verifiointi tapahtuu tässä
+
+app.get('/', (req, res) => {
+    console.log(req.decoded)
+    console.log("Palvelimeen tultiin kyselemään dataa")
+    res.send("Nyt ollaan palvelussa, joka edellyttää kirjautumisen")
+});
+
+//
 // express router routes:
 const tenttiRoute = require('./routes/api/tentti');
 const kysymysRoute = require('./routes/api/kysymys');
