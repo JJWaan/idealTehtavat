@@ -46,7 +46,6 @@ router.post('/', async (request, response) => {
         const sqlCommand = "INSERT INTO kayttaja (kayttaja_nimi) VALUES ($1)";
         await pool.postgrePool().query(sqlCommand, values);
         response.status(201).send(`Data '${request.body.teksti}' inserted succesfully`);
-        // console.log(`Query ${result.command} complete`);
     } catch (error) {
         response.status(500).send(`'Something went wrong:', ${error.message}`);
         console.error(error);

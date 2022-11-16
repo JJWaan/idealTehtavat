@@ -6,7 +6,7 @@ const pool = require('../../../config/databaseconfig');
 router.get('/', async (request, response) => {
     try {
         const sqlCommand = "SELECT * FROM tentti";
-        let result = await pool.postgrePool().query(sqlCommand);
+        let result = await postgrePool().query(sqlCommand); // i was here
         response.status(200).send(result.rows);
         console.log(`Query ${result.command} completed succesfully`);
     } catch (error) {
