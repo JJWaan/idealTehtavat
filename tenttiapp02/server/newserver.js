@@ -21,10 +21,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-//
-
-let password = "salasana"
-let email = "vilho@gmail.com"
+const pool = require('../config/databaseconfig');
 
 //
 // Signup
@@ -33,7 +30,7 @@ app.post("/signup", async (req, res, next) => {
     let result; 
     try {
         let hashed = await bcrypt.hash(password, saltRounds)
-        result = await pool.query(
+        result = await pool.postgrePool().query(
             "INSERT INTO kayttaja (user_email, user_password) VALUES ($1,$2) RETURNING user_id", [email, hashed]);
     } catch (error) {
         console.error(error);
@@ -42,7 +39,7 @@ app.post("/signup", async (req, res, next) => {
     let token;
     try {
         token = jwt.sign(
-            { userId: result.rows[0].id, email: email },
+            { userId: result.rows[0].user_id, email: email },
             "secretkeyappearshere",
             { expiresIn: "1h" }
         );
@@ -53,7 +50,7 @@ app.post("/signup", async (req, res, next) => {
     res.status(201).json({
         success: true,
         data: {
-            userId: result.rows[0].id,
+            userId: result.rows[0].user_id,
             email: email,
             token: token
         }
@@ -68,26 +65,27 @@ app.post("/login", async (req, res, next) => {
     let existingUser;
     try {
         // existingUser = await User.findOne({ email: email });
-        let result = await pool.query ("SELECT * FROM kayttaja where user_email=$1", [email])
+        let result = await pool.postgrePool().query("SELECT * FROM kayttaja WHERE user_email=$1", [email])
         existingUser = {
-            password: result.rows[0].password,
-            email: result.rows[0].email,
-            id: result.rows[0].id
+            password: result.rows[0].user_password,
+            email: result.rows[0].user_email,
+            id: result.rows[0].user_id
         };
+        console.log(existingUser);
         passwordMatch = await bcrypt.compare(password, existingUser.password)
-    } catch {
+    } catch (error) {
         console.error(error);
         return next();
     }
 
     if (!passwordMatch) {
-        const error = Error("Wrong details please check at once");
-        return next(error);
+        console.error("Wrong details please check at once");
+        return next();
     }
 
     let token;
     try {
-    //Creating jwt token
+    // Creating jwt token
         token = jwt.sign(
             { userId: existingUser.id, email: existingUser.email },
             "secretkeyappearshere",    //.env
@@ -101,8 +99,8 @@ app.post("/login", async (req, res, next) => {
     res.status(200).json({
         success: true,
         data: {
-        userId: existingUser.id,
-        email: existingUser.email,
+        userId: existingUser.user_id,
+        email: existingUser.user_email,
         token: token,
         },
     });
@@ -173,7 +171,7 @@ app.use('/kayttaja', kayttajaRoute);
 const logger = (request, response, next) => {
     console.log('Query made to:')
     console.log(`${request.protocol}://${request.get('host')}`);
-    console.log('Original:', request.originalUrl);
+    console.log(request.originalUrl);
     next();
 };
 app.use(logger);
