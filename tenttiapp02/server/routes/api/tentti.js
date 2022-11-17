@@ -1,4 +1,5 @@
 const express = require('express');
+const postgrePool = require('../../../config/databaseconfig');
 const router = express.Router();
 const pool = require('../../../config/databaseconfig');
 
@@ -6,11 +7,12 @@ const pool = require('../../../config/databaseconfig');
 router.get('/', async (request, response) => {
     try {
         const sqlCommand = "SELECT * FROM tentti";
-        let result = await postgrePool().query(sqlCommand); // i was here
+        let result = await postgrePool().query(sqlCommand);
         response.status(200).send(result.rows);
         console.log(`Query ${result.command} completed succesfully`);
     } catch (error) {
-        response.status(404).send(`Caught error with ${request.command} query:`, error.message);
+        response.send.error
+        response.send(`Caught error with ${request.command} query:`, error.message);
         console.error('err:', error);
     }
     // pool.end(() => { console.log('pool ended') })
@@ -22,7 +24,7 @@ router.get('/:id', async (request, response) => {
     // if (request.params.id) {
         try {
             const sqlCommand = "SELECT * FROM tentti WHERE tentti_id=($1)";
-            let result = await pool.postgrePool().query(sqlCommand, [id]);
+            let result = await postgrePool().query(sqlCommand, [id]);
             response.status(200).send(result.rows);
             console.log(`Query ${result.command} complete for id ${request.params.id}`);
         } catch (error) {
@@ -44,7 +46,7 @@ router.post('/', async (request, response) => {
     const values = [teksti];
     try {
         const sqlCommand = "INSERT INTO tentti (tentti_nimi) VALUES ($1)";
-        await pool.postgrePool().query(sqlCommand, values);
+        await postgrePool().query(sqlCommand, values);
         response.status(201).send(`Data '${request.body.teksti}' inserted succesfully`);
         // console.log(`Query ${result.command} complete`);
     } catch (error) {
@@ -65,7 +67,7 @@ router.put('/:id', async (request, response) => {
             return;
         }
         const sqlCommand = "UPDATE tentti SET tentti_kuvaus=($1) WHERE tentti_id=($2)";
-        await pool.postgrePool().query(sqlCommand, values);
+        await postgrePool().query(sqlCommand, values);
         response.status(201).send(`Data updated succesfully with '${teksti}' by id # ${id}`);
         console.log(`Query complete for id ${request.params.id}`);
     } catch (error) {
@@ -81,7 +83,7 @@ router.delete('/:id', async (request, response) => {
     const values = [id];
     try {
         const sqlCommand = "DELETE FROM tentti WHERE tentti_id=($1)";
-        await pool.postgrePool().query(sqlCommand, values);
+        await postgrePool().query(sqlCommand, values);
         response.status(201).send(`Deleted id # ${id} succesfully`);
         console.log(`Deleted tentti id ${request.params.id}`);
     } catch (error) {
