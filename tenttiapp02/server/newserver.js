@@ -12,13 +12,20 @@ app.use(express.static('public')); // static page
 const verifyToken = require('./midware/jwttokenverify');
 const poolStats = require('./midware/databasepoolstats');
 // port config:
-const port = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8080;
 // environment variable. commandline with 'export PORT=5000' || set PORT=5000 (for windows).
 // now PORT is env.variable. this is the proper way to assing ports.
-// attempt to read value of a env.value, otherwise use arbitrary number (8080) for a dev machine
+// attempt to read value of a env.value, otherwise use arbitrary number (8080) for a dev machine.
 
-// test endpoint, after verification:
-app.get('/', verifyToken, (request, response) => {
+// test endpoint, after jwt-token verification:
+// app.get('/', verifyToken, (request, response) => {
+//     poolStats();
+//     console.log('request info:', request.decoded)
+//     console.log("Palvelimeen tultiin kyselemään dataa")
+//     response.send("Nyt ollaan palvelussa, joka edellyttää kirjautumisen")
+// });
+
+app.get('/', (request, response) => {
     poolStats();
     console.log('request info:', request.decoded)
     console.log("Palvelimeen tultiin kyselemään dataa")
@@ -43,7 +50,7 @@ app.use('/vaihtoehto', vaihtoehto);
 app.use('/kayttaja', kayttaja);
 
 // port variable listener
-app.listen(port, () => { console.log(`server on port ${port}`); });
+app.listen(PORT, () => { console.log(`server on port ${PORT}`); });
 
 //
 // ---- ---- ---- ----

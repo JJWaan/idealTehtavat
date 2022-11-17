@@ -20,6 +20,7 @@ const client = new Client({
     port: 5432,
 });
 
-const postgrePool = () => pool;
-
-module.exports = postgrePool;
+module.exports = {
+    pool,
+    client,
+}

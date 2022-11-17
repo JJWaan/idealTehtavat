@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../../../config/databaseconfig');
+const { pool } = require('../../../config/databaseconfig');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const postgrePool = require('../../../config/databaseconfig');
 
 // Login route
 router.post("/", async (request, response, next) => {
@@ -11,7 +10,7 @@ router.post("/", async (request, response, next) => {
     let passwordMatch=false;
     let existingUser;
     try {
-        let result = await postgrePool().query("SELECT * FROM kayttaja WHERE user_email=$1", [email]);
+        let result = await pool.query("SELECT * FROM kayttaja WHERE user_email=$1", [email]);
         existingUser = {
             password: result.rows[0].user_password,
             email: result.rows[0].user_email,

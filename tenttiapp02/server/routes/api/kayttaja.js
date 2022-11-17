@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../../../config/databaseconfig');
+const { pool } = require('../../../config/databaseconfig');
 
 // get all kayttaja, sql select from db
 router.get('/', async (request, response) => {
     try {
         const sqlCommand = "SELECT * FROM kayttaja";
-        let result = await pool.postgrePool().query(sqlCommand);
+        let result = await pool.query(sqlCommand);
         response.status(200).send(result.rows);
         console.log(`Query ${result.command} completed succesfully`);
     } catch (error) {
@@ -22,7 +22,7 @@ router.get('/:id', async (request, response) => {
     // if (request.params.id) {
         try {
             const sqlCommand = "SELECT * FROM kayttaja WHERE kayttaja_id=($1)";
-            let result = await pool.postgrePool().query(sqlCommand, [id]);
+            let result = await pool.query(sqlCommand, [id]);
             response.status(200).send(result.rows);
             console.log(`Query ${result.command} complete for id ${request.params.id}`);
         } catch (error) {
@@ -44,7 +44,7 @@ router.post('/', async (request, response) => {
     const values = [teksti];
     try {
         const sqlCommand = "INSERT INTO kayttaja (kayttaja_nimi) VALUES ($1)";
-        await pool.postgrePool().query(sqlCommand, values);
+        await pool.query(sqlCommand, values);
         response.status(201).send(`Data '${request.body.teksti}' inserted succesfully`);
     } catch (error) {
         response.status(500).send(`'Something went wrong:', ${error.message}`);
@@ -64,7 +64,7 @@ router.put('/:id', async (request, response) => {
             return;
         }
         const sqlCommand = "UPDATE kayttaja SET kayttaja_kuvaus=($1) WHERE kayttaja_id=($2)";
-        await pool.postgrePool().query(sqlCommand, values);
+        await pool.query(sqlCommand, values);
         response.status(201).send(`Data updated succesfully with '${teksti}' by id # ${id}`);
         console.log(`Query complete for id ${request.params.id}`);
     } catch (error) {
@@ -80,7 +80,7 @@ router.delete('/:id', async (request, response) => {
     const values = [id];
     try {
         const sqlCommand = "DELETE FROM kayttaja WHERE kayttaja_id=($1)";
-        await pool.postgrePool().query(sqlCommand, values);
+        await pool.query(sqlCommand, values);
         response.status(201).send(`Deleted id # ${id} succesfully`);
         console.log(`Deleted kayttaja id ${request.params.id}`);
     } catch (error) {

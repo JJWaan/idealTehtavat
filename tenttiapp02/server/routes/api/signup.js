@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../../../config/databaseconfig');
+const { pool } = require('../../../config/databaseconfig');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const postgrePool = require('../../../config/databaseconfig');
 // bcrypt config:
 const saltRounds = 10;
 
@@ -13,7 +12,7 @@ router.post("/", async (request, response, next) => {
     let result;
     try {
         let hashed = await bcrypt.hash(password, saltRounds)
-        result = await postgrePool().query(
+        result = await pool.query(
             "INSERT INTO kayttaja (user_email, user_password) VALUES ($1,$2) RETURNING user_id",
             [email, hashed]
         );
