@@ -8,27 +8,19 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public')); // static page
-
 // midware:
 const verifyToken = require('./midware/jwttokenverify');
 const poolStats = require('./midware/databasepoolstats');
-
 // port config:
 const port = process.env.PORT || 8080;
 // environment variable. commandline with 'export PORT=5000' || set PORT=5000 (for windows).
 // now PORT is env.variable. this is the proper way to assing ports.
 // attempt to read value of a env.value, otherwise use arbitrary number (8080) for a dev machine
 
-// ---- ---- ---- ----
-// middleware function calls:
-// database statistics:
-// poolStats();
-
-// app.use(verifyToken); // jwt-token verification (midware)
-
 // test endpoint, after verification:
 app.get('/', verifyToken, (request, response) => {
-    // console.log(request.decoded)
+    poolStats();
+    console.log('request info:', request.decoded)
     console.log("Palvelimeen tultiin kyselemään dataa")
     response.send("Nyt ollaan palvelussa, joka edellyttää kirjautumisen")
 });
