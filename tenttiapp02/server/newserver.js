@@ -3,19 +3,38 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
+// SSL:
+const https = require('https');
+const fs = require('fs');
+// http port config:
+// const PORT = process.env.PORT || 8080;
+
 // use:
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public')); // static page
+
 // midware:
 const verifyToken = require('./midware/jwttokenverify');
 const poolStats = require('./midware/databasepoolstats');
-// port config:
-const PORT = process.env.PORT || 8080;
-// environment variable. commandline with 'export PORT=5000' || set PORT=5000 (for windows).
-// now PORT is env.variable. this is the proper way to assing ports.
-// attempt to read value of a env.value, otherwise use arbitrary number (8080) for a dev machine.
+
+//
+
+https.createServer(
+    {
+        key: fs.readFileSync("key.pem"),
+        cert: fs.readFileSync("cert.pem"),
+    },
+    app
+    )
+    .listen(4000, () => {
+    console.log("https server at port 4000");
+});
+
+app.get('/', (request, response)=> {
+    response.send("Hello from https express server.")
+});
 
 // test endpoint, after jwt-token verification:
 // app.get('/', verifyToken, (request, response) => {
@@ -25,12 +44,13 @@ const PORT = process.env.PORT || 8080;
 //     response.send("Nyt ollaan palvelussa, joka edellyttää kirjautumisen")
 // });
 
-app.get('/', (request, response) => {
-    poolStats();
-    console.log('request info:', request.decoded)
-    console.log("Palvelimeen tultiin kyselemään dataa")
-    response.send("Nyt ollaan palvelussa, joka edellyttää kirjautumisen")
-});
+// test endpoint, no jwt-token verification:
+// app.get('/', (request, response) => {
+//     console.log('request info:', request.decoded)
+//     console.log("Palvelimeen tultiin kyselemään dataa")
+//     response.send("Nyt ollaan palvelussa, joka edellyttää kirjautumisen")
+//     poolStats();
+// });
 
 // express router:
 // auth files:
@@ -49,8 +69,8 @@ app.use('/kysymys', kysymys);
 app.use('/vaihtoehto', vaihtoehto);
 app.use('/kayttaja', kayttaja);
 
-// port variable listener
-app.listen(PORT, () => { console.log(`server on port ${PORT}`); });
+// port variable listener, http server
+// app.listen(PORT, () => { console.log(`server on port ${PORT}`); });
 
 //
 // ---- ---- ---- ----
