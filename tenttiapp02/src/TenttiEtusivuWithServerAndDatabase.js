@@ -1,20 +1,34 @@
-import axios from "axios";
+// import dependencies
 import React, { useReducer, useEffect } from "react";
+import axios from "axios";
 
-import Tentti from './Tentti'
+// import components
+import LoadingScreen from "./LoadingScreen";
+import Tentti from './Tentti';
 
-// main state
-let appiukko = {
-  pekka: null,
-  seivataan: false,
-  onkoAlustettu: false
-}
+// // //
+
+// initial main state
+let mainstate = {
+  stateData: null,
+  isInitialized: false,
+  saving: false,
+};
 
 // 
 
-// reducer, tilanhallinta
+// reducer, state management
 const reducer = (state, action) => {
   switch (action.type) {
+      // initialize state on first load (useEffect):
+      case 'INIT_DATA':
+        console.log("initialize app state, reducer")
+        return {
+          ...state,
+          stateData: action.payload.stateData,
+          isInitialized: action.payload.initialized,
+        }
+
     // ui input tilanhallinta
     // case 'KYSYMYS_MUUTETTU': {
     //   console.log("KYSYMYS_MUUTETTU reducer")
@@ -32,40 +46,35 @@ const reducer = (state, action) => {
     //   kopio.seivataan = true;
     //   return kopio; }
 
-    // useEffectin redut
-      // initialize state
-    case 'ALUSTA_DATA':
-      console.log("initialize app state, reducer")
-      return { ...state,
-        pekka: action.payload.pekka,
-        onkoAlustettu: action.payload.alustettu,
-        seivataan: false }
-
     // case 'PAIVITA_TALLENNUSTILA':
     //     console.log("paivita tallennustila redu");
     //     return {...state, seivataan: action.payload};
 
     default:
-      throw new Error('err', action.payload, state);
+      throw new Error('threw new error:', action.payload, state);
   }
 };
 
-// m a i n  c o m p o n e n t :
-const MainContentWithServerAndDB = () => {
-  const [tentti, dispatch] = useReducer(reducer, appiukko);
-  console.log("mis mennää, state nyt:", tentti);
+// main function, component
+const TenttiEtusivuWithServerAndDB = () => {
+  const [tenttiState, dispatch] = useReducer(reducer, mainstate);
+  console.log('alkuperäinen state:', tenttiState);
   useEffect(() => {
-      const haetaanServulta = async() => {
+      const getDB = async() => {
           try {
-              let servunData = await axios.get('https://localhost:4000/tentti')
-              console.log("state, servunData:", servunData);
-              console.log("servunData.data, db:stä tuleva data:", servunData.data);
-              dispatch({ type: 'ALUSTA_DATA',
-                payload: { pekka: servunData.data, alustettu: true } })
+              let dbData = await axios.get('https://localhost:4000/tentti')
+                console.log("state getin jälkeen, dbData:", dbData);
+              dispatch({
+                type: 'INIT_DATA',
+                payload: {
+                  stateData: dbData.data,
+                  initialized: true
+                }
+              })
           }
-          catch (error) { console.log("damnit, init fail:", error); }
-      }
-      haetaanServulta();
+          catch (error) { console.log('data initialization failed:', error) }
+      };
+      getDB();
   }, []);
 
     // useEffect(() => {
@@ -82,20 +91,14 @@ const MainContentWithServerAndDB = () => {
     //   if(tentti.seivataan === true) { tallennaServulle(); };
     // }, [tentti.seivataan]);
 
-  const LoadingScreen = () => {
-    console.log("käytiin loading screenissä")
-    return <div className="loading-screen-bg">loading screeni</div>
-  };
-
   return (
     <>
       <div className="main-content">
-        {tentti.onkoAlustettu === true ?
-          <Tentti tentti={tentti.pekka} /> : <LoadingScreen />}
-          {/* <Tentti tentti={tentti.pekka} dispatch={dispatch} /> : <LoadingScreen />} */}
+        {tenttiState.isInitialized === true ?
+        <Tentti tentti={tenttiState.stateData} /> : <LoadingScreen />}
       </div>
     </>
   );
 };
 
-export default MainContentWithServerAndDB;
+export default TenttiEtusivuWithServerAndDB;

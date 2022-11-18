@@ -21,11 +21,12 @@ const Tentti = ({ tentti }) => {
   // })
 
 const kaikki = tentti.map((item, i) => { return (
-  <div key={i}>
-    <p>{item.tentti_nimi}</p>
-    <p>{item.tentti_id}</p>
-  </div>
-) })
+    <div key={i}>
+      <p>{item.tentti_nimi}</p>
+      <p>{item.tentti_id}</p>
+    </div>
+  )});
+
 // console.log('tässä kaikki:', kaikki);
 
   return (

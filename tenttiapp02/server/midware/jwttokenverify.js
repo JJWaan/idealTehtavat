@@ -2,7 +2,7 @@
 
 const jwt = require('jsonwebtoken'); // npm i jsonwebtoken
 
-const verifyToken = (request, response, next) =>{
+const verifyToken = (request, response, next) => {
     const token = request.headers.authorization?.split(' ')[1]; 
     // set headers to: Authorization: 'bearer TOKEN'
     if (!token) {

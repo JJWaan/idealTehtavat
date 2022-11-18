@@ -6,9 +6,6 @@ const bodyParser = require('body-parser');
 // SSL:
 const https = require('https');
 const fs = require('fs');
-// http port config:
-// const PORT = process.env.PORT || 8080;
-
 // use:
 app.use(cors());
 app.use(bodyParser.json());
@@ -18,9 +15,15 @@ app.use(express.static('public')); // static page
 // midware:
 const verifyToken = require('./midware/jwttokenverify');
 const poolStats = require('./midware/databasepoolstats');
+// const sendEmail = require('./midware/nodemailer');
 
-//
+// http port config:
+// const PORT = process.env.PORT || 8080;
 
+// http server:
+// app.listen(PORT, () => { console.log(`http, server on port ${PORT}`); });
+
+// https server:
 https.createServer(
     {
         key: fs.readFileSync("key.pem"),
@@ -29,27 +32,21 @@ https.createServer(
     app
     )
     .listen(4000, () => {
-    console.log("https server at port 4000");
+    console.log('https, server at port 4000');
 });
 
+// root endpoint, get
 app.get('/', (request, response)=> {
-    response.send("Hello from https express server.")
+    response.send('Hello from express server.');
+    poolStats();
 });
 
 // test endpoint, after jwt-token verification:
 // app.get('/', verifyToken, (request, response) => {
 //     poolStats();
 //     console.log('request info:', request.decoded)
-//     console.log("Palvelimeen tultiin kyselemään dataa")
-//     response.send("Nyt ollaan palvelussa, joka edellyttää kirjautumisen")
-// });
-
-// test endpoint, no jwt-token verification:
-// app.get('/', (request, response) => {
-//     console.log('request info:', request.decoded)
-//     console.log("Palvelimeen tultiin kyselemään dataa")
-//     response.send("Nyt ollaan palvelussa, joka edellyttää kirjautumisen")
-//     poolStats();
+//     console.log('Palvelimeen tultiin kyselemään dataa')
+//     response.send('Nyt ollaan palvelussa, joka edellyttää kirjautumisen')
 // });
 
 // express router:
@@ -69,10 +66,6 @@ app.use('/kysymys', kysymys);
 app.use('/vaihtoehto', vaihtoehto);
 app.use('/kayttaja', kayttaja);
 
-// port variable listener, http server
-// app.listen(PORT, () => { console.log(`server on port ${PORT}`); });
-
-//
 // ---- ---- ---- ----
 //
 // old stuff for the record:
