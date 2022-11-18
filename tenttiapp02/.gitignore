@@ -21,3 +21,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+idealTehtavat/tenttiapp02/server/cert.pem
+idealTehtavat/tenttiapp02/server/csr.pem
+idealTehtavat/tenttiapp02/server/key.pem
