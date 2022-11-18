@@ -16,21 +16,21 @@ let appiukko = {
 const reducer = (state, action) => {
   switch (action.type) {
     // ui input tilanhallinta
-    case 'KYSYMYS_MUUTETTU': {
-      console.log("KYSYMYS_MUUTETTU reducer")
-      const kopio = {...state};
-      const { kysymys, index, tenttiIndex } = action.payload;
-      kopio.pekka[tenttiIndex].tenttiItessaan[index].kysymys = kysymys;
-      kopio.seivataan = true;
-      return kopio; }
+    // case 'KYSYMYS_MUUTETTU': {
+    //   console.log("KYSYMYS_MUUTETTU reducer")
+    //   const kopio = {...state};
+    //   const { kysymys, index, tenttiIndex } = action.payload;
+    //   kopio.pekka[tenttiIndex].tenttiItessaan[index].kysymys = kysymys;
+    //   kopio.seivataan = true;
+    //   return kopio; }
 
-    case 'VASTAUS_MUUTETTU': {
-      console.log("VASTAUS_MUUTETTU reducer")
-      const kopio = {...state};
-      const { uusiVastaus, vastauksenIndex, kysymyksenIndex, tenttiIndex } = action.payload;
-      kopio.pekka[tenttiIndex].tenttiItessaan[kysymyksenIndex].vastausvaihtoehdot[vastauksenIndex].vastaus = uusiVastaus;
-      kopio.seivataan = true;
-      return kopio; }
+    // case 'VASTAUS_MUUTETTU': {
+    //   console.log("VASTAUS_MUUTETTU reducer")
+    //   const kopio = {...state};
+    //   const { uusiVastaus, vastauksenIndex, kysymyksenIndex, tenttiIndex } = action.payload;
+    //   kopio.pekka[tenttiIndex].tenttiItessaan[kysymyksenIndex].vastausvaihtoehdot[vastauksenIndex].vastaus = uusiVastaus;
+    //   kopio.seivataan = true;
+    //   return kopio; }
 
     // useEffectin redut
       // initialize state
@@ -41,9 +41,9 @@ const reducer = (state, action) => {
         onkoAlustettu: action.payload.alustettu,
         seivataan: false }
 
-    case 'PAIVITA_TALLENNUSTILA':
-        console.log("paivita tallennustila redu");
-        return {...state, seivataan: action.payload};
+    // case 'PAIVITA_TALLENNUSTILA':
+    //     console.log("paivita tallennustila redu");
+    //     return {...state, seivataan: action.payload};
 
     default:
       throw new Error('err', action.payload, state);
@@ -53,34 +53,34 @@ const reducer = (state, action) => {
 // m a i n  c o m p o n e n t :
 const MainContentWithServerAndDB = () => {
   const [tentti, dispatch] = useReducer(reducer, appiukko);
-  // console.log("mis mennää, state nyt:", tentti);
+  console.log("mis mennää, state nyt:", tentti);
   useEffect(() => {
       const haetaanServulta = async() => {
           try {
-              let servunData = await axios.get('http://localhost:8080/')
-              // console.log("state, servunData:", servunData);
-              // console.log("state, servunData.data:", servunData.data);
+              let servunData = await axios.get('https://localhost:4000/tentti')
+              console.log("state, servunData:", servunData);
+              console.log("servunData.data, db:stä tuleva data:", servunData.data);
               dispatch({ type: 'ALUSTA_DATA',
-                payload: { pekka: servunData.data.pekka, alustettu: true } })
+                payload: { pekka: servunData.data, alustettu: true } })
           }
           catch (error) { console.log("damnit, init fail:", error); }
       }
       haetaanServulta();
   }, []);
 
-    useEffect(() => {
-      const tallennaServulle = async() => {
-          try {
-              await axios.post('http://localhost:8080/', tentti)
-              // tärkeää seuraavassa on flagin asettaminen falseksi
-              dispatch({ type: "PAIVITA_TALLENNUSTILA", payload: false })
-              console.log("state, (muutokset input kentässä) tallennetaan servulle")
-          }
-          catch (error) { console.log("prkl, update failed", error); }
-      }
-      // ehto. jos tätä ei ole tallennaServulle() ajetaan flagista riippumatta...
-      if(tentti.seivataan === true) { tallennaServulle(); };
-    }, [tentti.seivataan]);
+    // useEffect(() => {
+    //   const tallennaServulle = async() => {
+    //       try {
+    //           await axios.post('http://localhost:8080/', tentti)
+    //           // tärkeää seuraavassa on flagin asettaminen falseksi
+    //           dispatch({ type: "PAIVITA_TALLENNUSTILA", payload: false })
+    //           console.log("state, (muutokset input kentässä) tallennetaan servulle")
+    //       }
+    //       catch (error) { console.log("prkl, update failed", error); }
+    //   }
+    //   // ehto. jos tätä ei ole tallennaServulle() ajetaan flagista riippumatta...
+    //   if(tentti.seivataan === true) { tallennaServulle(); };
+    // }, [tentti.seivataan]);
 
   const LoadingScreen = () => {
     console.log("käytiin loading screenissä")
@@ -91,7 +91,8 @@ const MainContentWithServerAndDB = () => {
     <>
       <div className="main-content">
         {tentti.onkoAlustettu === true ?
-          <Tentti tentti={tentti.pekka} dispatch={dispatch} /> : <LoadingScreen />}
+          <Tentti tentti={tentti.pekka} /> : <LoadingScreen />}
+          {/* <Tentti tentti={tentti.pekka} dispatch={dispatch} /> : <LoadingScreen />} */}
       </div>
     </>
   );

@@ -8,7 +8,7 @@ router.get('/', async (request, response) => {
     try {
         const sqlCommand = "SELECT * FROM tentti";
         let result = await pool.query(sqlCommand);
-        response.status(200).send(result.rows);
+        response.status(200).json(result.rows);
         console.log(`Query ${result.command} completed succesfully`);
     } catch (error) {
         response.send.error
