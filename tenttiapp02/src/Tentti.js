@@ -1,38 +1,21 @@
-// import Kysymys from "./Kysymys";
-
-// yksittäisen tentin rendaus komponentti
 const Tentti = ({ tentti }) => {
-  console.log("käytiin tentti.js:ssä", tentti);
-  // const kysymykset = tentti.map((item, tenttiIndex) => {
-  //   return (<>
-  //     {
-  //       item.tenttiItessaan.map((item, index) => {
-  //         return (
-  //           <Kysymys
-  //             key={index}
-  //             kysymys={item}
-  //             dispatch={dispatch}
-  //             kysymyksenIndex={index}
-  //             tenttiIndex={tenttiIndex} />
-  //         )
-  //       })
-  //     }
-  //   </>)
-  // })
+console.log("käytiin tentti.js:ssä, tentti-propsin sisältö:", tentti);
 
 const kaikki = tentti.map((item, i) => { return (
-    <div key={i}>
-      <p>{item.tentti_nimi}</p>
-      <p>{item.tentti_id}</p>
-    </div>
-  )});
+  <div key={i}>
+    Täs mäpätää pelkästää tentti-taulun sisältöä mut ei tosiaa muuta koska mutsis oli mummos:
+    <p>Tentti nimeltä: {item.tentti_nimi}</p>
+    <p>{item.tentti_kuvaus}</p>
+    <p>tentin id: {item.tentti_id}</p>
+  </div>
+)});
 
 // console.log('tässä kaikki:', kaikki);
 
-  return (
-    <div className="tentti">
-      {kaikki}
-    </div>
+return (
+  <div className="tentti">
+    {kaikki}
+  </div>
   );
 };
 

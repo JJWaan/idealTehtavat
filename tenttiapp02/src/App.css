@@ -5,15 +5,17 @@ html, body {
   width: 100%;
   padding: 0;
   margin: 0;
+  color: #888;
 }
 
 /* global elements */
 p {
-  color: black;
+  color: #fff;
 }
 
 h1,h2,h3,h4,h5 {
   color: blue;
+  text-shadow: 0.3rem 0.3rem 0.3rem #666;
 }
 
 div {
@@ -21,69 +23,197 @@ div {
   margin: 0 auto;
 }
 
-/* main flex container */
-.main-flex-container {
+/* content render area after header and navbar */
+main {
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0;
+}
+
+/* main grid setup for content render area,
+(used in TenttiEtusivu), for NavLeft & Tentti.js */
+.main-grid-wrapper {
+  display: grid;
+  grid-template-columns: 20% 80%;
+  grid-template-rows: 100%; /* max content ? */
+}
+
+/* -- -- -- -- */
+
+/* component specific styles */
+
+/* initial page on load ("frontpage", "landingpage") */
+.landing-page {
+  width: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  /* justify-content: center; */
+  /* padding: 2rem; */
+  background-color: #023047;
+}
+
+/* grid setup for landing pages components */
+.landing-page-grid-wrapper {
+  width: 100%;
+  /* border: 1em solid #fff; */
+  display: grid;
+  grid-template-areas: 'header header header forms';
+  /* grid-template-columns: 70% 30%; */
+}
+
+.landing-page-header {
+  width: 100%;
+  padding: 1rem;
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* background-color: pink; */
+  grid-area: header;
+}
+
+.forms-container {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  grid-area: forms;
+  gap: 1rem;
+}
+
+/* signup and login containers: */
+.login-form-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* background-color: hotpink; */
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.signup-form-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* background-color: hotpink; */
+  gap: 1rem;
+  padding: 1rem;
+}
+
+/* -- -- -- -- */
+
+/* all input forms in landing page: */
+#login-signup-form-input {
+  width: 100%;
+  padding: 1rem;
+  background-color: #8ecae6;
+}
+
+/* all buttons in landing page: */
+.nappula {
+  max-width: 100%;
+  padding: 1rem;
+  background-color: #8ecae6;
+}
+
+/* -- -- -- -- */
+
+/* loading screen */
+.loading-screen {
+  width: 100%;
+  background-color: red;
+  display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 100%;
-  margin: 0;
-  /* padding: 1rem; */
-  border: 0.1em dotted pink;
 }
 
-/* header */
+.loading-element {
+  background-color: blue;
+  animation-name: loading-element-anim;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+}
+
+@keyframes loading-element-anim {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* main header (outside of browser-router) */
 .header-main {
-  width: 100%;
-  border: 0.1em dashed #666;
+  padding: 1rem;
+  background-color: #8ecae6;
 }
 
-/* footer */
+/* main footer (outside of browser-router) */
 .footer-main {
-  width: 100%;
-  border: 0.1em dashed #666;
+  padding: 1rem;
+  background-color: #219ebc;
 }
 
-/* navbar */
+/* top navbar */
 nav {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: stretch;
   gap: 1em;
   width: 100%;
   padding: 1rem;
   margin: 0;
-  border: 0.1em dotted black;
+  background-color: #219ebc;
 }
 
-.tentti-etusivu {
+/* left navbar */
+.nav-left {
   display: flex;
-  padding: 2rem;
-  margin: 0;
-  background-color: #444;
-}
-
-.tentti {
-  border: 1rem solid darkmagenta;
-}
-
-.kysymys {
-  border: 1em dotted red;
-}
-
-.loading-screen-bg {
-  background-color: black;
-}
-
-.main-content {
+  flex-direction: column;
   width: 100%;
-  background-color: aquamarine;
-  padding: 5rem;
+  align-items: center;
+  padding: 2rem;
+  background-color: #8ecae6;
+  /* visibility: hidden; */
+  /* with transition */
+  /* transition: width 0.5s;
+  transition-timing-function: ease; */
+  /* transition-delay: 0.2s; */
+
+  /* with anim */
+  /* animation-name: testi;
+  animation-duration: 2s;
+  animation-delay: 0.5s;
+  animation-iteration-count: 1;
+  animation-timing-function: ease; tai ease-in-out
+  animation-fill-mode: both;
+  forwards:
+  Let the div element retain the style values set by the last keyframe when the animation ends
+  */
 }
 
-.kysymysJarkko {
-  border: 1em solid seagreen;
+/* .nav-left:hover {
+  width: 100%;
+} */
+
+.nav-left div:hover {
+  background-color: pink;
+}
+
+/* tentti render */
+.tentti {
+  width: 100%;
+  margin: 0 auto;
+  padding: 3rem;
+  background-color: #023047;
+}
+
+.tentti p {
+  color: white;
 }

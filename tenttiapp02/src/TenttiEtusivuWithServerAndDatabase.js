@@ -3,6 +3,7 @@ import React, { useReducer, useEffect } from "react";
 import axios from "axios";
 
 // import components
+import NavbarLeft from "./NavbarLeft";
 import LoadingScreen from "./LoadingScreen";
 import Tentti from './Tentti';
 
@@ -92,12 +93,10 @@ const TenttiEtusivuWithServerAndDB = () => {
     // }, [tentti.seivataan]);
 
   return (
-    <>
-      <div className="main-content">
-        {tenttiState.isInitialized === true ?
-        <Tentti tentti={tenttiState.stateData} /> : <LoadingScreen />}
-      </div>
-    </>
+    <div className='main-grid-wrapper'>
+      <NavbarLeft />
+        {tenttiState.isInitialized === true ? <Tentti tentti={tenttiState.stateData} /> : <LoadingScreen />}
+    </div>
   );
 };
 
