@@ -2,8 +2,11 @@ const express = require('express');
 const router = express.Router();
 const { pool } = require('../../../config/databaseconfig');
 
+// admin-boolean (in database) checker, jwt-token verifier
 const isAdmin = require('../../midware/isadmin');
 const verifyToken = require('../../midware/jwttokenverify');
+
+//
 
 // get all tentti, sql select from db
 router.get('/', async (request, response) => {
@@ -20,10 +23,9 @@ router.get('/', async (request, response) => {
     // pool.end(() => { console.log('pool ended') })
 });
 
-// get tentti by id (works, id validation is under construction)
+// get tentti by id
 router.get('/:id', async (request, response) => {
     const { id } = request.params;
-    // if (request.params.id) {
         try {
             const sqlCommand = "SELECT * FROM tentti WHERE tentti_id=($1)";
             let result = await pool.query(sqlCommand, [id]);
@@ -38,12 +40,6 @@ router.get('/:id', async (request, response) => {
             response.status(404).send(`Caught error with ${request.command} query:`, error.message);
             console.error('err:', error);
         }
-        // return;
-    // }
-    // else {
-        // needs to check against a value if id exists
-        // response.status(404).json({message: `No data with id of ${request.params.id}`})
-    // }
     // pool.end(() => { console.log('pool ended') })
 });
 
@@ -64,7 +60,7 @@ router.post('/', verifyToken, isAdmin, async (request, response) => {
 });
 
 // update a single tentti_kuvaus
-router.put('/:id', async (request, response) => {
+router.put('/:id', verifyToken, isAdmin, async (request, response) => {
     const { teksti } = request.body;
     const { id } = request.params;
     const values = [teksti, id];
@@ -85,7 +81,7 @@ router.put('/:id', async (request, response) => {
 });
 
 // delete data (tentti)
-router.delete('/:id', async (request, response) => {
+router.delete('/:id', verifyToken, isAdmin, async (request, response) => {
     const { id } = request.params;
     const values = [id];
     try {

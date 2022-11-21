@@ -2,6 +2,12 @@ const express = require('express');
 const router = express.Router();
 const { pool } = require('../../../config/databaseconfig');
 
+// admin-boolean (in database) checker, jwt-token verifier
+const isAdmin = require('../../midware/isadmin');
+const verifyToken = require('../../midware/jwttokenverify');
+
+//
+
 // get all vastaus, sql select from db
 router.get('/', async (request, response) => {
     try {
@@ -16,10 +22,9 @@ router.get('/', async (request, response) => {
     // pool.end(() => { console.log('pool ended') })
 });
 
-// get vastaus by id (works, id validation is under construction)
+// get vastaus by id
 router.get('/:id', async (request, response) => {
     const { id } = request.params;
-    // if (request.params.id) {
         try {
             const sqlCommand = "SELECT * FROM vastaus WHERE vastaus_id=($1)";
             let result = await pool.query(sqlCommand, [id]);
@@ -29,17 +34,11 @@ router.get('/:id', async (request, response) => {
             response.status(404).send(`Caught error with ${request.command} query:`, error.message);
             console.error('err:', error);
         }
-        // return;
-    // }
-    // else {
-        // needs to check against a value if id exists
-        // response.status(404).json({message: `No data with id of ${request.params.id}`})
-    // }
     // pool.end(() => { console.log('pool ended') })
 });
 
 // add data (a new vastaus with vastaus_nimi)
-router.post('/', async (request, response) => {
+router.post('/', verifyToken, isAdmin, async (request, response) => {
     const { teksti } = request.body;
     const values = [teksti];
     try {
@@ -55,7 +54,7 @@ router.post('/', async (request, response) => {
 });
 
 // update a single vastaus_kuvaus
-router.put('/:id', async (request, response) => {
+router.put('/:id', verifyToken, isAdmin, async (request, response) => {
     const { teksti } = request.body;
     const { id } = request.params;
     const values = [teksti, id];
@@ -76,7 +75,7 @@ router.put('/:id', async (request, response) => {
 });
 
 // delete data (vastaus)
-router.delete('/:id', async (request, response) => {
+router.delete('/:id', verifyToken, isAdmin, async (request, response) => {
     const { id } = request.params;
     const values = [id];
     try {

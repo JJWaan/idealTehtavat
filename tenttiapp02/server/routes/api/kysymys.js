@@ -3,6 +3,12 @@ const router = express.Router();
 const { pool, client } = require('../../../config/databaseconfig');
 const poolStats = require('../../midware/databasepoolstats');
 
+// admin-boolean (in database) checker, jwt-token verifier
+const isAdmin = require('../../midware/isadmin');
+const verifyToken = require('../../midware/jwttokenverify');
+
+//
+
 // get all kysymys, sql select from db
 router.get('/', async (request, response) => {
     try {
@@ -17,10 +23,9 @@ router.get('/', async (request, response) => {
     pool.end(() => { console.log('pool ended') });
 });
 
-// get kysymys by id (id validation is under construction)
+// get kysymys by id
 router.get('/:id', async (request, response) => {
     const { id } = request.params;
-    // if (request.params.id) {
         try {
             const sqlCommand = "SELECT * FROM kysymys WHERE kysymys_id=($1)";
             let result = await pool.query(sqlCommand, [id]);
@@ -30,17 +35,11 @@ router.get('/:id', async (request, response) => {
             response.status(404).send(`Caught error with ${request.command} query:`, error.message);
             console.error('err:', error);
         }
-        // return;
-    // }
-    // else {
-        // needs to check against a value if id exists
-        // response.status(404).json({message: `No data with id of ${request.params.id}`})
-    // }
     // postgrePool().end(() => { console.log('pool ended') })
 });
 
 // update a single kysymys_teksti
-router.put('/:id', async (request, response) => {
+router.put('/:id', verifyToken, isAdmin, async (request, response) => {
     const { teksti } = request.body;
     const { id } = request.params;
     const values = [teksti, id];
@@ -61,7 +60,7 @@ router.put('/:id', async (request, response) => {
 });
 
 // delete data (kysymys)
-router.delete('/:id', async (request, response) => {
+router.delete('/:id', verifyToken, isAdmin, async (request, response) => {
     const { id } = request.params;
     const values = [id];
     try {
@@ -77,7 +76,7 @@ router.delete('/:id', async (request, response) => {
 });
 
 // transactional. add new kysymys to kysymys-table && relation table (tentti_kysymys_liitos)
-router.post('/', async (request, response) => {
+router.post('/', verifyToken, isAdmin, async (request, response) => {
     const { kysymys, tentti_id, pisteet } = request.body;
     const junanvessa = await pool.connect();
     console.log("vessahätä");

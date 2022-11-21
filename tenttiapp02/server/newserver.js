@@ -3,7 +3,6 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
-// const jwt = require('jsonwebtoken');
 // SSL:
 const https = require('https');
 const fs = require('fs');
@@ -49,15 +48,15 @@ app.get('/', (request, response)=> {
 app.get('/ver', verifyToken, (request, response) => {
     poolStats();
     console.log('request info:', request.decoded)
-    console.log('Palvelimeen tultiin kyselemään dataa')
-    response.send('Nyt ollaan palvelussa, joka edellyttää kirjautumisen')
+    console.log('jwt-token verification ok')
+    response.send('This service requires JSON Web Token verification.')
 });
 
 // test mock endpoint, after admin-boolean check
 app.post('/admintest', isAdmin, async (request, response) => {
     console.log('request info:', request.decoded)
-    console.log('Palvelimeen tultiin kyselemään dataa')
-    response.send('Nyt ollaan palvelussa, joka edellyttää admin oikeudet')
+    console.log('isAdmin ok')
+    response.send('This service requires admin rights.')
 
     const { teksti } = request.body;
     const values = [teksti];
