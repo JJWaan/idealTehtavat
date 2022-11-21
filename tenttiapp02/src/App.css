@@ -143,6 +143,7 @@ main {
 }
 
 .loading-element {
+  /* padding: 5rem; */
   background-color: blue;
   animation-name: loading-element-anim;
   animation-duration: 2s;

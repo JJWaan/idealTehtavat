@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
+// const jwt = require('jsonwebtoken');
 // SSL:
 const https = require('https');
 const fs = require('fs');
@@ -14,6 +15,7 @@ app.use(express.static('public')); // static page
 
 // midware:
 const verifyToken = require('./midware/jwttokenverify');
+const isAdmin = require('./midware/isadmin');
 const poolStats = require('./midware/databasepoolstats');
 // const sendEmail = require('./midware/nodemailer');
 
@@ -35,19 +37,39 @@ https.createServer(
     console.log('https, server at port 4000');
 });
 
+//
+
 // root endpoint, get
 app.get('/', (request, response)=> {
     response.send('Hello from express server.');
     poolStats();
 });
 
-// test endpoint, after jwt-token verification:
-// app.get('/', verifyToken, (request, response) => {
-//     poolStats();
-//     console.log('request info:', request.decoded)
-//     console.log('Palvelimeen tultiin kyselemään dataa')
-//     response.send('Nyt ollaan palvelussa, joka edellyttää kirjautumisen')
-// });
+// test mock endpoint, after jwt-token verification:
+app.get('/ver', verifyToken, (request, response) => {
+    poolStats();
+    console.log('request info:', request.decoded)
+    console.log('Palvelimeen tultiin kyselemään dataa')
+    response.send('Nyt ollaan palvelussa, joka edellyttää kirjautumisen')
+});
+
+// test mock endpoint, after admin-boolean check
+app.post('/admintest', isAdmin, async (request, response) => {
+    console.log('request info:', request.decoded)
+    console.log('Palvelimeen tultiin kyselemään dataa')
+    response.send('Nyt ollaan palvelussa, joka edellyttää admin oikeudet')
+
+    const { teksti } = request.body;
+    const values = [teksti];
+    try {
+        const sqlCommand = "INSERT INTO tentti (tentti_nimi) VALUES ($1)";
+        await pool.query(sqlCommand, values);
+        response.status(201).send(`Data '${request.body.teksti}' inserted succesfully`);
+    } catch (error) {
+        response.status(500).send(`Caught error with ${request.command} query:`, error.message);
+        console.error(error);
+    }
+});
 
 // express router:
 // auth files:

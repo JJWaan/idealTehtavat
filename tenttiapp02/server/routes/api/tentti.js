@@ -1,7 +1,9 @@
 const express = require('express');
-const postgrePool = require('../../../config/databaseconfig');
 const router = express.Router();
 const { pool } = require('../../../config/databaseconfig');
+
+const isAdmin = require('../../midware/isadmin');
+const verifyToken = require('../../midware/jwttokenverify');
 
 // get all tentti, sql select from db
 router.get('/', async (request, response) => {
@@ -45,8 +47,8 @@ router.get('/:id', async (request, response) => {
     // pool.end(() => { console.log('pool ended') })
 });
 
-// add data (a new tentti with tentti_nimi)
-router.post('/', async (request, response) => {
+// add data (a new tentti with tentti_nimi), needs admin rights
+router.post('/', verifyToken, isAdmin, async (request, response) => {
     const { teksti } = request.body;
     const values = [teksti];
     try {
