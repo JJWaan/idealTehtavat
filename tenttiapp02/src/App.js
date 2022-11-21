@@ -2,12 +2,12 @@ import './App.css';
 
 import MainHeader from './MainHeaderElement';
 import NavbarTop from './NavbarTop';
-import LandingPage from './InitialLandingPage';
+// import LandingPage from './InitialLandingPage';
 import MainFooter from './MainFooterElement';
 
 // import MainContent from './TenttiEtusivu';
 // import MainContentWithServer from './TenttiEtusivuWithServer';
-// import MainContentWithServerAndDB from './TenttiEtusivuWithServerAndDatabase';
+import MainContentWithServerAndDB from './TenttiEtusivuWithServerAndDatabase';
 
 function App() {
   return (
@@ -15,7 +15,8 @@ function App() {
         <MainHeader />
         <NavbarTop />
         <main>
-            <LandingPage />
+            {/* <LandingPage /> */}
+            <MainContentWithServerAndDB />
         </main>
         <MainFooter />
     </>
