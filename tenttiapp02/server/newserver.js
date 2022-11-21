@@ -38,13 +38,13 @@ https.createServer(
 
 //
 
-// root endpoint, get
+// root endpoint, get:
 app.get('/', (request, response)=> {
     response.send('Hello from express server.');
     poolStats();
 });
 
-// test mock endpoint, after jwt-token verification:
+// test mock endpoint, uses jwt-token verification:
 app.get('/ver', verifyToken, (request, response) => {
     poolStats();
     console.log('request info:', request.decoded)
@@ -52,7 +52,7 @@ app.get('/ver', verifyToken, (request, response) => {
     response.send('This service requires JSON Web Token verification.')
 });
 
-// test mock endpoint, after admin-boolean check
+// test mock endpoint, uses admin-boolean check:
 app.post('/admintest', isAdmin, async (request, response) => {
     console.log('request info:', request.decoded)
     console.log('isAdmin ok')

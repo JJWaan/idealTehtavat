@@ -17,8 +17,8 @@ router.get('/', async (request, response) => {
         response.status(200).send(result.rows);
         console.log(`Query ${result.command} completed succesfully`);
     } catch (error) {
-        response.status(404).send(`Caught error with ${request.command} : ${error.message}`);
-        console.error('err:', error);
+        response.send('Caught error with query');
+        console.error('err', error);
     }
     pool.end(() => { console.log('pool ended') });
 });
@@ -32,11 +32,13 @@ router.get('/:id', async (request, response) => {
             response.status(200).send(result.rows);
             console.log(`Query ${result.command} complete for id ${request.params.id}`);
         } catch (error) {
-            response.status(404).send(`Caught error with ${request.command} query:`, error.message);
-            console.error('err:', error);
+            response.send('Caught error with query');
+            console.error('err', error);
         }
     // postgrePool().end(() => { console.log('pool ended') })
 });
+
+// all post, put & del methods require jwt-token and admin rights:
 
 // update a single kysymys_teksti
 router.put('/:id', verifyToken, isAdmin, async (request, response) => {
@@ -53,7 +55,7 @@ router.put('/:id', verifyToken, isAdmin, async (request, response) => {
         response.status(201).send(`Data updated succesfully with '${teksti}' by id # ${id}`);
         console.log(`Query complete for id ${request.params.id}`);
     } catch (error) {
-        response.status(404).send(`Caught error with ${request.command} query:`, error.message);
+        response.send('Caught error with query');
         console.error('err', error);
     }
     // postgrePool().end(() => { console.log('pool ended') })
@@ -69,7 +71,7 @@ router.delete('/:id', verifyToken, isAdmin, async (request, response) => {
         response.status(201).send(`Deleted kysymys id # ${id} succesfully`);
         console.log(`Deleted kysymys id ${request.params.id}`);
     } catch (error) {
-        response.status(404).send(`Caught error with ${request.command} query:`, error.message);
+        response.send('Caught error with query');
         console.error('err', error);
     }
     // postgrePool().end(() => { console.log('pool ended') })
@@ -92,8 +94,8 @@ router.post('/', verifyToken, isAdmin, async (request, response) => {
         response.status(200).send(`Inserted '${request.body.kysymys}' to tentti_id # ${tentti_id}`);
     } catch (error) {
         await junanvessa.query('ROLLBACK');
-            res.status(500).send(`Caught error with ${request.command} query:`, error.message);
-            console.error('err:', error);
+            response.send('Caught error with query');
+            console.error('err', error);
     } finally {
         junanvessa.release();
         console.log("vessahätä released");
