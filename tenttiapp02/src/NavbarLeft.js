@@ -8,15 +8,16 @@ const NavbarLeft = ( { tentti } ) => {
     return (
         <div className="nav-left">
             {/* <div>{tentinNimi}</div> */}
-            <div><p>kakka kikkelssön</p></div>
-            <div><p>nikke näkkelssön</p></div>
-            <div><p>ström surströmmin</p></div>
-            <div>never gonna</div>
-            <div>give you up</div>
-            <div>|| let you down</div>
-            <div>*saxophone solo*</div>
-            <div>*megaphone solo*</div>
-            <div>*han solo*</div>
+            <div><p>tentin nimi</p></div>
+            <div><p>tentin nimi</p></div>
+            <div><p>tentin nimi</p></div>
+            <div><p>tentin nimi</p></div>
+            <div><p>tentin nimi</p></div>
+            <div><p>tentin nimi</p></div>
+            <div>vain div</div>
+            <div>vain div</div>
+            <div>vain div</div>
+            <div>vain div</div>
         </div>
     )
 };

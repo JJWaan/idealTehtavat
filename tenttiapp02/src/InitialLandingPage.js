@@ -14,8 +14,7 @@ const LandingPage = () => {
                     {/* login form: */}
                     <div className="login-form-container">
                         <p>login</p>
-                        <form>
-                            <label htmlFor="x">Käyttäjänimi:</label> <br />
+                        <form id="login-form">
                             <input
                                 id="login-signup-form-input"
                                 name="kayttaja_id"
@@ -24,9 +23,6 @@ const LandingPage = () => {
                                 onChange={ (kirjoitus) => { console.log("login nimi txt:", kirjoitus.target.value) } }
                             />
 
-                            <br />
-
-                            <label htmlFor="y">Salasana:</label> <br />
                             <input
                                 id="login-signup-form-input"
                                 name="kayttaja_salasana"
@@ -34,20 +30,21 @@ const LandingPage = () => {
                                 placeholder="Salanasi"
                                 onChange={ (kirjoitus) => { console.log("login salasana txt:", kirjoitus.target.value) } }
                             />
+
                         </form>
-                            <button
-                                className="nappula"
+                        <button
+                                className="login-signup-button"
+                                // form="login-form"
                                 onClick={() => {console.log("login nappi")}}
                                 >Kirjaudu sisään
                             </button>
+
                     </div>
 
                     {/* signup form: */}
                     <div className="signup-form-container">
                         <p>signup</p>
-                        <form>
-
-                            <label htmlFor="x">Käyttäjänimi:</label> <br />
+                        <form id="signup-form">
                             <input
                                 id="login-signup-form-input"
                                 name="kayttaja_nimi"
@@ -56,9 +53,6 @@ const LandingPage = () => {
                                 onChange={ (kirjoitus) => { console.log("signup nimi txt:", kirjoitus.target.value) } }
                             />
 
-                            <br />
-
-                            <label htmlFor="y">Sähköposti-osoite:</label> <br />
                             <input
                                 id="login-signup-form-input"
                                 name="kayttaja_email"
@@ -69,7 +63,8 @@ const LandingPage = () => {
 
                         </form>
                             <button
-                                className="nappula"
+                                className="login-signup-button"
+                                // form="signup-form"
                                 onClick={() => {console.log("signuppi nappi")}}
                                 >Luo käyttäjä
                             </button>
