@@ -30,6 +30,24 @@ main {
   margin: 0;
 }
 
+/* global elements, specific styles */
+
+.p-title {
+  padding: 1rem;
+  font-size: 2rem;
+}
+
+.p-desc {
+  margin: 1rem;
+  padding-left: 3rem;
+  font-size: 1rem;
+}
+
+.p-id {
+  padding: 1.5rem;
+  font-size: 0.5rem;
+}
+
 /* main grid setup for content render area,
 (used in TenttiEtusivu), for NavLeft & Tentti.js */
 .main-grid-wrapper {
@@ -188,33 +206,42 @@ nav {
 
 /* left navbar */
 .nav-left {
+  /* position: relative; */
   display: flex;
   flex-direction: column;
   width: 100%;
   align-items: center;
-  padding: 2rem;
+  padding: 1rem;
   background-color: #8ecae6;
   /* visibility: hidden; */
+
   /* with transition */
-  /* transition: width 0.5s;
-  transition-timing-function: ease; */
+  /* transition: width 0.5s; */
+  /* transition-timing-function: ease; */
   /* transition-delay: 0.2s; */
+}
 
   /* with anim */
-  /* animation-name: testi;
-  animation-duration: 2s;
-  animation-delay: 0.5s;
+.nav-left:hover {
+  animation-name: nav-left-shrink;
+  animation-duration: 1s;
+  animation-delay: 0.2s;
   animation-iteration-count: 1;
-  animation-timing-function: ease; tai ease-in-out
-  animation-fill-mode: both;
-  forwards:
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+  /* forwards:
   Let the div element retain the style values set by the last keyframe when the animation ends
   */
 }
 
-/* .nav-left:hover {
-  width: 100%;
-} */
+@keyframes nav-left-shrink {
+  from {
+    transform: translate(0%, 0%);
+  }
+  to {
+    transform: translate(-60%, 0%);
+  }
+}
 
 .nav-left div:hover {
   background-color: pink;

@@ -40,6 +40,33 @@ router.get('/:id', async (request, response) => {
 
 // all post, put & del methods require jwt-token and admin rights:
 
+// transactional. add new kysymys to kysymys-table && relation table (tentti_kysymys_liitos)
+router.post('/', async (request, response) => {
+    const { kysymys, tentti_id, pisteet } = request.body;
+    const junanvessa = await pool.connect();
+    console.log("vessahätä");
+    console.log(request.body);
+    try {
+        await junanvessa.query('BEGIN');
+            let sqlCommand = "INSERT INTO kysymys (kysymys_teksti) VALUES ($1) RETURNING kysymys_id";
+            const result = await pool.query(sqlCommand, [kysymys]);
+            const values = [tentti_id, result.rows[0].kysymys_id, pisteet];
+            sqlCommand = "INSERT INTO tentti_kysymys_liitos (tentin_id, kysymyksen_id, kysymys_pisteet) VALUES ($1, $2, $3)";
+            await pool.query(sqlCommand, values);
+        await junanvessa.query('COMMIT');
+        response.status(200).send(`Inserted '${request.body.kysymys}' to tentti_id # ${tentti_id}`);
+    } catch (error) {
+        await junanvessa.query('ROLLBACK');
+            response.send('Caught error with query');
+            console.error('err', error);
+    } finally {
+        junanvessa.release();
+        console.log("vessahätä released");
+    }
+    poolStats();
+    // pool.end(() => { console.log('pool ended') })
+});
+
 // update a single kysymys_teksti
 router.put('/:id', verifyToken, isAdmin, async (request, response) => {
     const { teksti } = request.body;
@@ -75,33 +102,6 @@ router.delete('/:id', verifyToken, isAdmin, async (request, response) => {
         console.error('err', error);
     }
     // postgrePool().end(() => { console.log('pool ended') })
-});
-
-// transactional. add new kysymys to kysymys-table && relation table (tentti_kysymys_liitos)
-router.post('/', verifyToken, isAdmin, async (request, response) => {
-    const { kysymys, tentti_id, pisteet } = request.body;
-    const junanvessa = await pool.connect();
-    console.log("vessahätä");
-    console.log(request.body);
-    try {
-        await junanvessa.query('BEGIN');
-            let sqlCommand = "INSERT INTO kysymys (kysymys_teksti) VALUES ($1) RETURNING kysymys_id";
-            const result = await pool.query(sqlCommand, [kysymys]);
-            const values = [tentti_id, result.rows[0].kysymys_id, pisteet];
-            sqlCommand = "INSERT INTO tentti_kysymys_liitos (tentti_id, kysymys_id, kysymys_pisteet) VALUES ($1, $2, $3)";
-            await pool.query(sqlCommand, values);
-        await junanvessa.query('COMMIT');
-        response.status(200).send(`Inserted '${request.body.kysymys}' to tentti_id # ${tentti_id}`);
-    } catch (error) {
-        await junanvessa.query('ROLLBACK');
-            response.send('Caught error with query');
-            console.error('err', error);
-    } finally {
-        junanvessa.release();
-        console.log("vessahätä released");
-    }
-    poolStats();
-    // pool.end(() => { console.log('pool ended') })
 });
 
 // export

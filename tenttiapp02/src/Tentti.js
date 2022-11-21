@@ -3,10 +3,10 @@ console.log("käytiin tentti.js:ssä, tentti-propsin sisältö:", tentti);
 
 const kaikki = tentti.map((item, i) => { return (
   <div key={i}>
-    Täs mäpätää pelkästää tentti-taulun sisältöä mut ei tosiaa muuta koska mutsis oli mummos:
-    <p>Tentti nimeltä: {item.tentti_nimi}</p>
-    <p>{item.tentti_kuvaus}</p>
-    <p>tentin id: {item.tentti_id}</p>
+    map pelkästää tentti-taulun sisältöä mut ei tosiaa muuta, koska lapio:
+    <p className="p-title">{item.tentti_nimi}</p>
+    <p className="p-desc">{item.tentti_kuvaus}</p>
+    <p className="p-id">tentti id, moi: {item.tentti_id}</p>
   </div>
 )});
 

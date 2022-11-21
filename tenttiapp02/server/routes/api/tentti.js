@@ -36,6 +36,12 @@ router.get('/:id', async (request, response) => {
                 WHERE tentti_id=($1)
             `;
 
+            // SELECT kysymys_id, kysymys_teksti
+            // FROM kysymys
+            // INNER JOIN tentti_kysymys_liitos
+            // ON kysymys.kysymys_id = tentti_kysymys_liitos.kysymyksen_id
+            // (where tentti_id is $1 huh?)
+
             // SELECT column_name(s)
             // FROM table1
             // INNER JOIN table2
