@@ -34,6 +34,7 @@ https.createServer(
     )
     .listen(4000, () => {
     console.log('https, server at port 4000');
+    poolStats();
 });
 
 //
@@ -79,6 +80,7 @@ const tentti = require('./routes/api/tentti');
 const kysymys = require('./routes/api/kysymys');
 const vaihtoehto = require('./routes/api/vaihtoehto');
 const kayttaja = require('./routes/api/kayttaja');
+const { pool } = require('../config/databaseconfig');
 // routes:
 app.use('/signup', signup);
 app.use('/login', login);

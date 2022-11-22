@@ -98,13 +98,16 @@ router.put('/:id', verifyToken, isAdmin, async (request, response) => {
 });
 
 // delete data (tentti)
+
+// jos tentti poistetaan tentti-taulusta, pitää poistaa myös data tentti_kysymys_liitos-taulusta!
+
 router.delete('/:id', verifyToken, isAdmin, async (request, response) => {
     const { id } = request.params;
     const values = [id];
     try {
         const sqlCommand = "DELETE FROM tentti WHERE tentti_id=($1)";
         await pool.query(sqlCommand, values);
-        response.status(201).send(`Deleted id # ${id} succesfully`);
+        response.status(201).send(`Deleted id # ${id} successfully`);
         console.log(`Deleted tentti id ${request.params.id}`);
     } catch (error) {
         response.send('Caught error with query');

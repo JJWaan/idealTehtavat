@@ -45,7 +45,7 @@ router.post('/', async (request, response) => {
     const { kysymys, tentti_id, pisteet } = request.body;
     const junanvessa = await pool.connect();
     console.log("vessahätä");
-    console.log(request.body);
+    console.log("vessahädän body:", request.body);
     try {
         await junanvessa.query('BEGIN');
             let sqlCommand = "INSERT INTO kysymys (kysymys_teksti) VALUES ($1) RETURNING kysymys_id";
@@ -89,20 +89,53 @@ router.put('/:id', verifyToken, isAdmin, async (request, response) => {
 });
 
 // delete data (kysymys)
+// jos kysymys poistetaan kysymys-taulusta, se poistetaan myös tentti_kysymys_liitos-taulusta.
 router.delete('/:id', verifyToken, isAdmin, async (request, response) => {
     const { id } = request.params;
     const values = [id];
+    const junanvessa = await pool.connect();
+    console.log('Deleting data @ database, from Tables: kysymys, tentti_kysymys_liitos');
     try {
-        const sqlCommand = "DELETE FROM kysymys WHERE kysymys_id=($1)";
-        await pool.query(sqlCommand, values);
-        response.status(201).send(`Deleted kysymys id # ${id} succesfully`);
-        console.log(`Deleted kysymys id ${request.params.id}`);
-    } catch (error) {
-        response.send('Caught error with query');
+        await junanvessa.query('BEGIN');
+            let sqlCommand = "DELETE FROM kysymys WHERE kysymys_id=($1)";
+            await pool.query(sqlCommand, values);
+            console.log(`Deleted kysymys id # ${id} from "kysymys"-table successfully`);
+
+            sqlCommand = "DELETE FROM tentti_kysymys_liitos WHERE kysymyksen_id=($1)";
+            await pool.query(sqlCommand, values);
+        await junanvessa.query('COMMIT');
+        response.status(201).send(`Deleted kysymys id # ${id} succesfully, from Tables: kysymys, tentti_kysymys_liitos `);
+        console.log(`Deleted kysymys id # ${id} from "tentti_kysymys_liitos"-relationtable successfully`);
+    }
+    catch (error) {
+        await junanvessa.query('ROLLBACK');
+        response.send('Caught error with query, rolled back');
         console.error('err', error);
     }
-    // postgrePool().end(() => { console.log('pool ended') })
+    finally {
+        junanvessa.release();
+        console.log('Delete complete, PoolClient released');
+    }
+    poolStats();
+    // pool.end(() => { console.log('pool ended') })
 });
+
+// delete only from kysymys-table:
+// router.delete('/:id', verifyToken, isAdmin, async (request, response) => {
+// router.delete('/:id', async (request, response) => {
+//     const { id } = request.params;
+//     const values = [id];
+//     try {
+//         const sqlCommand = "DELETE FROM kysymys WHERE kysymys_id=($1)";
+//         await pool.query(sqlCommand, values);
+//         response.status(201).send(`Deleted kysymys id # ${id} succesfully`);
+//         console.log(`Deleted kysymys id ${request.params.id}`);
+//     } catch (error) {
+//         response.send('Caught error with query');
+//         console.error('err', error);
+//     }
+//     // postgrePool().end(() => { console.log('pool ended') })
+// });
 
 // export
 module.exports = router;
