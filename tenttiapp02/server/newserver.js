@@ -75,22 +75,26 @@ app.post('/admintest', isAdmin, async (request, response) => {
 // auth files:
 const signup = require('./routes/api/signup');
 const login = require('./routes/api/login');
+// endpoint for front:
+const initial = require('./routes/api/get_init_data');
 // exam-related files:
 const tentti = require('./routes/api/tentti');
 const kysymys = require('./routes/api/kysymys');
 const vaihtoehto = require('./routes/api/vaihtoehto');
 const kayttaja = require('./routes/api/kayttaja');
-const { pool } = require('../config/databaseconfig');
 // routes:
 app.use('/signup', signup);
 app.use('/login', login);
+app.use('/initial', initial);
 app.use('/tentti', tentti);
 app.use('/kysymys', kysymys);
 app.use('/vaihtoehto', vaihtoehto);
 app.use('/kayttaja', kayttaja);
 
+//
 // ---- ---- ---- ----
 //
+
 // old stuff for the record:
 
 // (deprecated, not used anymore:)

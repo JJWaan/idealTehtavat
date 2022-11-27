@@ -4,9 +4,8 @@ const NavbarTop = () => {
     return (
         <>
             <nav>
-                <p>mou</p>
-                <p>mou</p>
-                <p>mou</p>
+                <p>Login</p>
+                <p>About</p>
             </nav>
         </>
     )

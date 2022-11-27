@@ -13,6 +13,12 @@ const verifyToken = require('../../midware/jwttokenverify');
 router.get('/', async (request, response) => {
     try {
         const sqlCommand = "SELECT * FROM kysymys";
+        // const sqlCommand = `
+        //     SELECT *
+        //     FROM kysymys
+        //     INNER JOIN tentti_kysymys_liitos
+        //     ON kysymys.kysymys_id = tentti_kysymys_liitos.kysymyksen_id
+        // `;
         let result = await pool.query(sqlCommand);
         response.status(200).send(result.rows);
         console.log(`Query ${result.command} completed succesfully`);
@@ -20,14 +26,21 @@ router.get('/', async (request, response) => {
         response.send('Caught error with query');
         console.error('err', error);
     }
-    pool.end(() => { console.log('pool ended') });
+    // pool.end(() => { console.log('pool ended') });
 });
 
 // get kysymys by id
 router.get('/:id', async (request, response) => {
     const { id } = request.params;
         try {
-            const sqlCommand = "SELECT * FROM kysymys WHERE kysymys_id=($1)";
+            // const sqlCommand = "SELECT * FROM kysymys WHERE kysymys_id=($1)";
+            const sqlCommand = `
+                SELECT *
+                FROM kysymys
+                INNER JOIN tentti_kysymys_liitos
+                ON kysymys.kysymys_id = tentti_kysymys_liitos.kysymyksen_id
+                WHERE kysymys_id=($1)
+            `;
             let result = await pool.query(sqlCommand, [id]);
             response.status(200).send(result.rows);
             console.log(`Query ${result.command} complete for id ${request.params.id}`);
@@ -88,7 +101,7 @@ router.put('/:id', verifyToken, isAdmin, async (request, response) => {
     // postgrePool().end(() => { console.log('pool ended') })
 });
 
-// delete data (kysymys)
+// delete data (kysymys) && (tentti_kysymys_liitos)
 // jos kysymys poistetaan kysymys-taulusta, se poistetaan myös tentti_kysymys_liitos-taulusta.
 router.delete('/:id', verifyToken, isAdmin, async (request, response) => {
     const { id } = request.params;
@@ -104,8 +117,8 @@ router.delete('/:id', verifyToken, isAdmin, async (request, response) => {
             sqlCommand = "DELETE FROM tentti_kysymys_liitos WHERE kysymyksen_id=($1)";
             await pool.query(sqlCommand, values);
         await junanvessa.query('COMMIT');
-        response.status(201).send(`Deleted kysymys id # ${id} succesfully, from Tables: kysymys, tentti_kysymys_liitos `);
-        console.log(`Deleted kysymys id # ${id} from "tentti_kysymys_liitos"-relationtable successfully`);
+            response.status(201).send(`Deleted kysymys id # ${id} succesfully, from Tables: kysymys, tentti_kysymys_liitos `);
+            console.log(`Deleted kysymys id # ${id} from "tentti_kysymys_liitos"-relationtable successfully`);
     }
     catch (error) {
         await junanvessa.query('ROLLBACK');

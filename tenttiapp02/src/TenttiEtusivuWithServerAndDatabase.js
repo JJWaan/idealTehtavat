@@ -6,6 +6,7 @@ import axios from "axios";
 import NavbarLeft from "./NavbarLeft";
 import LoadingScreen from "./LoadingScreen";
 import Tentti from './Tentti';
+import StatusbarRight from "./StatusbarRight";
 
 // // //
 
@@ -23,7 +24,7 @@ const reducer = (state, action) => {
   switch (action.type) {
       // initialize state on first load (useEffect):
       case 'INIT_DATA':
-        console.log("initialize app state, reducer")
+        console.log("initialize app state, reducer, täällä payload dbData.data:sta tulee mainstate-objektin stateData !")
         return {
           ...state,
           stateData: action.payload.stateData,
@@ -59,12 +60,12 @@ const reducer = (state, action) => {
 // main function, component
 const TenttiEtusivuWithServerAndDB = () => {
   const [tenttiState, dispatch] = useReducer(reducer, mainstate);
-  console.log('alkuperäinen state:', tenttiState);
+  console.log('alkuperäinen state (tenttiState):', tenttiState);
   useEffect(() => {
       const getDB = async() => {
           try {
-              let dbData = await axios.get('https://localhost:4000/tentti')
-                console.log("state getin jälkeen, dbData:", dbData);
+              let dbData = await axios.get('https://localhost:4000/initial')
+                console.log("get, tämä lähtee dispatchina dbData.data:", dbData.data);
               dispatch({
                 type: 'INIT_DATA',
                 payload: {
@@ -92,12 +93,25 @@ const TenttiEtusivuWithServerAndDB = () => {
     //   if(tentti.seivataan === true) { tallennaServulle(); };
     // }, [tentti.seivataan]);
 
+  console.log('tenttiState vielä kerran ennen renderiä:', tenttiState);
+  console.log(`<Tentti tentti={tenttiState.stateData} /> ,
+    tenttiStaten stateData mitä tämä komponentti lähettää eteenpäin Tentti.js:lle propsina:`,
+    tenttiState.stateData)
+
   return (
     <div className='main-grid-wrapper'>
       <NavbarLeft />
-        {tenttiState.isInitialized === true ? <Tentti tentti={tenttiState.stateData} /> : <LoadingScreen />}
+        {tenttiState.isInitialized === true ? <> <Tentti tentti={tenttiState.stateData} /> </> : <LoadingScreen />}
+      <StatusbarRight />
     </div>
   );
 };
 
 export default TenttiEtusivuWithServerAndDB;
+
+// arkkitehtuuri:
+// index
+// --> App
+// --> TenttiEtusivuWithServerAndDatabase (tämä filu)
+// --> Tentti
+// ---> Kysymys

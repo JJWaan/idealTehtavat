@@ -1,55 +1,24 @@
+import Vastaus from "./Vastaus";
+
 // Kysymys komponentti
-const Kysymys = ({ kysymys, dispatch, kysymyksenIndex, tenttiIndex }) => {
-  const vastausvaihtoehdot = kysymys.vastausvaihtoehdot.map((item, index) => {
-    // console.log("vVaihtoehdot:", kysymys.vastausvaihtoehdot)
-    // console.log("kysymys.vastausvaihtoehdot", item);
-    // console.log("kysymys-propsi Tentti-komponentilta", kysymys)
 
-    return (
-      <div key={index} className="kysymysJarkko">
+const Kysymys = ( {kaikkidata} ) => {
+  console.log("käytiin Kysymys.js:ssä, kaikkidata sisältö:", kaikkidata);
 
-        <input type="radio" value={item.vastaus} name="kysymys" />
+  const kaikkiKys = kaikkidata.resKysymys.map((item, i) => { return (
+    <div key={i} className="kysymys">
+      <span className="kysymys-title">{item.kysymys_teksti}</span>
+      <span className="kysymys-id">id: ({item.kysymys_id})</span>
+      {/* <p className="p-desc">kysymyksen pisteet: {item.kysymys_pisteet}</p> */}
+      <Vastaus kaikkidataTaas={kaikkidata} />
+    </div>
+  )});
 
-          {/* vastauksen editointi: */}
-          <input className="vastaus-input"
-            type="text"
-            value={item.vastaus}
-            onChange={(event) => { dispatch({
-                type: 'VASTAUS_MUUTETTU',
-                payload: {
-                  uusiVastaus: event.target.value,
-                  vastauksenIndex: index,
-                  kysymyksenIndex: kysymyksenIndex,
-                  tenttiIndex: tenttiIndex
-                },
-              });
-            }}
-        />
 
-      </div>
-    );
-});
-
-    return (
-      <div className="kysymys">
-
-          <input className="kysymys-input" type="text"
-            value={kysymys.kysymys}
-            onChange={(event) =>
-              dispatch({
-                type: 'KYSYMYS_MUUTETTU',
-                payload: {
-                  kysymys: event.target.value,
-                  index: kysymyksenIndex,
-                  tenttiIndex: tenttiIndex
-                },
-              })
-            }
-          />
-
-        {vastausvaihtoehdot}
-
-      </div>
+  return (
+    <div className="kysymykset">
+        {kaikkiKys}
+    </div>
     );
 };
 

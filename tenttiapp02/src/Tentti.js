@@ -1,20 +1,27 @@
+import Kysymys from "./Kysymys";
+
+// Tentti komponentti
+
 const Tentti = ({ tentti }) => {
 console.log("käytiin tentti.js:ssä, tentti-propsin sisältö:", tentti);
 
-const kaikki = tentti.map((item, i) => { return (
-  <div key={i}>
-    map pelkästää tentti-taulun sisältöä mut ei tosiaa muuta, koska lapio:
-    <p className="p-title">{item.tentti_nimi}</p>
-    <p className="p-desc">{item.tentti_kuvaus}</p>
-    <p className="p-id">tentti id, moi: {item.tentti_id}</p>
+const kaikkiTentit = tentti.resTentti.map((item, i) => { return (
+  <div
+    key={i}
+    className="tentti">
+      <span className="tentti-title">{item.tentti_nimi}</span>
+      <span className="tentti-id">id: ({item.tentti_id})</span>
+      <p className="tentti-desc">{item.tentti_kuvaus}</p>
+      <Kysymys kaikkidata={tentti}/ >
   </div>
 )});
 
 // console.log('tässä kaikki:', kaikki);
 
 return (
-  <div className="tentti">
-    {kaikki}
+  <div className="tentti-container">
+    {kaikkiTentit}
+    {/* <Kysymys kaikkidata={tentti}/> */}
   </div>
   );
 };

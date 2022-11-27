@@ -1,17 +1,23 @@
 const express = require('express');
 const router = express.Router();
 const { pool } = require('../../../config/databaseconfig');
+const poolStats = require('../../midware/databasepoolstats');
 
-// admin-boolean (in database) checker, jwt-token verifier
+// admin (admin boolean set in database) checker, jwt-token verifier
 const isAdmin = require('../../midware/isadmin');
 const verifyToken = require('../../midware/jwttokenverify');
 
 //
 
-// get all tentti, sql select from db
 router.get('/', async (request, response) => {
     try {
-        const sqlCommand = "SELECT * FROM tentti";
+        // const sqlCommand = "SELECT * FROM tentti";
+        const sqlCommand = `
+            SELECT *
+            FROM tentti
+            LEFT JOIN tentti_kysymys_liitos
+            ON tentti.tentti_id = tentti_kysymys_liitos.tentin_id
+        `;
         let result = await pool.query(sqlCommand);
         response.status(200).json(result.rows);
         console.log(`Query ${result.command} completed succesfully`);
@@ -22,7 +28,7 @@ router.get('/', async (request, response) => {
     // pool.end(() => { console.log('pool ended') })
 });
 
-// get tentti (+ with it's contents (as in kysymykset & vastaukset)) by tentti id
+// get tentti, and its relations by tentti id
 router.get('/:id', async (request, response) => {
     const { id } = request.params;
         try {
@@ -97,22 +103,37 @@ router.put('/:id', verifyToken, isAdmin, async (request, response) => {
     // pool.end(() => { console.log('pool ended') })
 });
 
-// delete data (tentti)
-
-// jos tentti poistetaan tentti-taulusta, pitää poistaa myös data tentti_kysymys_liitos-taulusta!
+// delete data (tentti) && (tentti_kysymys_liitos)
+// jos kysymys poistetaan kysymys-taulusta, se poistetaan myös tentti_kysymys_liitos-taulusta.
 
 router.delete('/:id', verifyToken, isAdmin, async (request, response) => {
+// router.delete('/:id', verifyToken, isAdmin, async (request, response) => {
     const { id } = request.params;
     const values = [id];
+    const junanvessa = await pool.connect();
+    console.log('Deleting data @ database, from Tables: tentti, tentti_kysymys_liitos');
     try {
-        const sqlCommand = "DELETE FROM tentti WHERE tentti_id=($1)";
-        await pool.query(sqlCommand, values);
-        response.status(201).send(`Deleted id # ${id} successfully`);
-        console.log(`Deleted tentti id ${request.params.id}`);
-    } catch (error) {
-        response.send('Caught error with query');
+        await junanvessa.query('BEGIN');
+            let sqlCommand = "DELETE FROM tentti WHERE tentti_id=($1)";
+            await pool.query(sqlCommand, values);
+            console.log(`Deleted kysymys id # ${id} from "tentti"-table successfully`);
+
+            sqlCommand = "DELETE FROM tentti_kysymys_liitos WHERE tentin_id=($1)";
+            await pool.query(sqlCommand, values);
+        await junanvessa.query('COMMIT');
+            response.status(201).send(`Deleted tentti id # ${id} succesfully, from Tables: tentti, tentti_kysymys_liitos `);
+            console.log(`Deleted kysymys id # ${id} from "tentti_kysymys_liitos"-relationtable successfully`);
+    }
+    catch (error) {
+        await junanvessa.query('ROLLBACK');
+        response.send('Caught error with query, rolled back');
         console.error('err', error);
     }
+    finally {
+        junanvessa.release();
+        console.log('Delete complete, PoolClient released');
+    }
+    poolStats();
     // pool.end(() => { console.log('pool ended') })
 });
 
