@@ -37,6 +37,9 @@ router.get('/', async (request, response) => {
         // log result_liitos -->
         // console.log("liitos:", result_liitos.rows);
 
+        // mappaa tässä? ja filtteröi? ja tuuppaa resObjektiin?
+        // sit ei tarvi filteröidä frontissa?
+
         // combine query results into a new object:
         const resObject = {
             resTentti: result_tentti.rows,

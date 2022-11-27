@@ -14,13 +14,11 @@ function App() {
     <>
         <MainHeader />
         <NavbarTop />
-        <main>
-            {/* <LandingPage /> */}
-            <MainContentWithServerAndDB />
-        </main>
+        <LandingPage />
+        {/* <MainContentWithServerAndDB /> */}
         <MainFooter />
     </>
   );
-}
+};
 
 export default App;
