@@ -87,7 +87,7 @@ h1,h2,h3,h4,h5 {
 /* -- -- -- -- */
 
 /* all input forms in login component: */
-#login-signup-form-input {
+#form-input {
   width: 100%;
   padding: 1rem;
   margin: 0.5rem;

@@ -46,10 +46,10 @@ router.post("/", async (request, response, next) => {
  
     response.status(200).json({
         success: true,
-        data: {
-        userId: existingUser.user_id,
-        email: existingUser.user_email,
-        token: token,
+        kekkonen: {
+            userId: existingUser.user_id,
+            email: existingUser.user_email,
+            token: token,
         }
     });
 });
