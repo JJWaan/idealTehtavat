@@ -38,17 +38,32 @@ const LoginSignup = () => {
         event.preventDefault();
         try {
             const { data } = await axios.post("https://localhost:4000/signup", {
-                name: signup.kayttaja_nimi,
+                nimi: signup.kayttaja_nimi,
                 email: signup.kayttaja_email,
                 password: signup.kayttaja_salasana,
             });
-            console.log("dadadaa:", data);
-            // setSignup({ kayttaja_nimi: "", kayttaja_email: "", kayttaja_salasana: "" });
+            console.log("Uusi käyttäjä luotu ja tallennettu datalla:", data);
+            setSignup({ kayttaja_nimi: "", kayttaja_email: "", kayttaja_salasana: "" });
         }
         catch (error) { console.log("Signup error:", error); }
     };
 
+    // okay?:
+    const [onkToukkenii, setOnkToukkenii] = useState(null)
+
+    const OptimusPrime = () => {
+        return (
+            <div className="optimusPrime">
+                <p>no ainaki nappulaa painoit ei kait siinä</p>
+            </div>
+        );
+    }
+
     return (
+        <>
+
+        {onkToukkenii ? <OptimusPrime /> : null}
+
         <div className="forms-container">
 
             <div className="form-container">
@@ -57,7 +72,7 @@ const LoginSignup = () => {
                         id="form-input"
                         name="kayttaja_id"
                         type="text"
-                        placeholder="Sinun nimesi"
+                        placeholder="Sähköpostiosoitteesi"
                         required onChange={ loginKirjoitusta }
                     />
 
@@ -72,19 +87,18 @@ const LoginSignup = () => {
                     <button
                         className="login-signup-button"
                         form="login-form"
-                        onClick={() => {console.log("login nappi")}}
+                        onClick={() => setOnkToukkenii(true) }
                         >Kirjaudu sisään
                     </button>
             </div>
 
             <div className="form-container">
-{/* signupissa on seuraava: const { nimi, email, password } = request.body; */}
                 <form id="signup-form" onSubmit={ signupPostaaja }>
                     <input
                         id="form-input"
                         name="kayttaja_nimi"
                         type="text"
-                        placeholder="Sinun nimesi"
+                        placeholder="Uusi käyttäjänimi"
                         required onChange={ signupKirjoitusta }
                     />
 
@@ -92,7 +106,7 @@ const LoginSignup = () => {
                         id="form-input"
                         name="kayttaja_email"
                         type="email"
-                        placeholder="nimesi@sähköposti.com"
+                        placeholder="Sähköpostiosoitteesi"
                         required onChange={ signupKirjoitusta }
                     />
 
@@ -100,7 +114,7 @@ const LoginSignup = () => {
                         id="form-input"
                         name="kayttaja_salasana"
                         type="password"
-                        placeholder="Salasana"
+                        placeholder="Uusi salasana"
                         required onChange={ signupKirjoitusta }
                     />
 
@@ -108,13 +122,15 @@ const LoginSignup = () => {
                     <button
                         className="login-signup-button"
                         form="signup-form"
-                        onClick={() => {console.log("signuppi nappi")}}
+                        onClick={() => setOnkToukkenii(true) }
                         >Luo käyttäjä
                     </button>
 
             </div>
 
         </div>
+
+        </>
     )
 };
 

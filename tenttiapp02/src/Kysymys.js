@@ -14,18 +14,19 @@ const Kysymys = ({ kaikkidata }) => {
         {/* <p className="p-desc">kysymyksen pisteet: {item.kysymys_pisteet}</p> */}
 
         {/* lähettää saman datan propsina eteenpäin Vastaus-komponentille */}
-        <Vastaus kaikkidataTaas={kaikkidata} />
+        {/* <Vastaus kaikkidataTaas={kaikkidata} /> */}
       </div>
     );
   });
 
   // mappaa kaiken mitä on tullu liitos-taulusta
-  // const liitostaulunSisalto = kaikkidata.resLiitos.map((itemi) => {
-  //   return (
-  //     itemi.kysymyksen_id
-  //   );
-  // })
-  // console.log("liitos kiitos:", liitostaulunSisalto);
+  const liitostaulunSisalto = kaikkidata.resLiitos.map((itemi) => {
+    return (
+      itemi.kysymyksen_id
+    );
+  })
+
+  console.log("liitos kiitos:", liitostaulunSisalto);
   // itemin sisältö näyttää tältä:
 // kysymyksen_id: "22"
 // ​​kysymys_id: "22"

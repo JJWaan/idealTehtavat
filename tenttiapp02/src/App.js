@@ -1,23 +1,33 @@
+import { useState } from 'react';
+
 import './App.css';
 
 import MainHeader from './MainHeaderElement';
 import NavbarTop from './NavbarTop';
-import LandingPage from './InitialLandingPage';
 import MainFooter from './MainFooterElement';
 
-// import MainContent from './TenttiEtusivu';
-// import MainContentWithServer from './TenttiEtusivuWithServer';
-// import MainContentWithServerAndDB from './TenttiEtusivuWithServerAndDatabase';
+import LoginSignup from './LoginComponent';
+import TenttiEtusivuWithServerAndDatabase from './TenttiEtusivuWithServerAndDatabase';
 
 function App() {
+  const [onxTokee, setOnxTokee] = useState(localStorage.getItem("jwt-tokeni"));
+
   return (
-    <>
+    
+      onxTokee ?
+      <>
         <MainHeader />
         <NavbarTop />
-        <LandingPage />
-        {/* <MainContentWithServerAndDB /> */}
+        <TenttiEtusivuWithServerAndDatabase />
+      </>
+      :
+      <>
+        <MainHeader />
+        <NavbarTop />
+        <LoginSignup />
         <MainFooter />
-    </>
+      </>
+
   );
 };
 
