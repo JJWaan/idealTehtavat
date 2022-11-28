@@ -45,7 +45,8 @@ h1,h2,h3,h4,h5 {
   flex-wrap: nowrap;
   justify-content: center;
   padding: 2rem;
-  background-color: #023047;
+  /* background-color: #023047; */
+  background-image: linear-gradient(to right, red,orange,yellow,green,blue,indigo,violet);
 }
 
 .landing-page-header {

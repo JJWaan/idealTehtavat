@@ -4,6 +4,8 @@ import { useState } from "react";
 import axios from "axios";
 
 const LoginSignup = () => {
+
+    // login:
     const [login, setLogin] = useState({ kayttaja_id: "", kayttaja_salasana: "" })
 
     const loginKirjoitusta = (kirjoitus) => {
@@ -21,7 +23,29 @@ const LoginSignup = () => {
 
             localStorage.setItem("jwt-tokeni", data.kekkonen.token);
         }
-        catch (error) { console.log('perskele') }
+        catch (error) { console.log("Login error:", error) }
+    };
+
+    // signup:
+    const [signup, setSignup] = useState({ kayttaja_nimi: "", kayttaja_email: "", kayttaja_salasana: "" })
+
+    const signupKirjoitusta = (event) => {
+        const { name, value } = event.target;
+        setSignup({ ...signup, [name]: value });
+    };
+
+    const signupPostaaja = async (event) => {
+        event.preventDefault();
+        try {
+            const { data } = await axios.post("https://localhost:4000/signup", {
+                name: signup.kayttaja_nimi,
+                email: signup.kayttaja_email,
+                password: signup.kayttaja_salasana,
+            });
+            console.log("dadadaa:", data);
+            // setSignup({ kayttaja_nimi: "", kayttaja_email: "", kayttaja_salasana: "" });
+        }
+        catch (error) { console.log("Signup error:", error); }
     };
 
     return (
@@ -54,16 +78,14 @@ const LoginSignup = () => {
             </div>
 
             <div className="form-container">
-{/* tämä sidotaan /signup routeen */}
-{/* signupissa on seuraava: const { email, password } = request.body; */}
-                <form id="signup-form">
+{/* signupissa on seuraava: const { nimi, email, password } = request.body; */}
+                <form id="signup-form" onSubmit={ signupPostaaja }>
                     <input
                         id="form-input"
                         name="kayttaja_nimi"
                         type="text"
                         placeholder="Sinun nimesi"
-                        onChange={ (kirjoitus) => { console.log("signup nimi txt:", kirjoitus.target.value) } }
-                        // tähän joku funk
+                        required onChange={ signupKirjoitusta }
                     />
 
                     <input
@@ -71,8 +93,15 @@ const LoginSignup = () => {
                         name="kayttaja_email"
                         type="email"
                         placeholder="nimesi@sähköposti.com"
-                        onChange={ (kirjoitus) => { console.log("signup email txt:", kirjoitus.target.value) } }
-                        // tähän joku funk
+                        required onChange={ signupKirjoitusta }
+                    />
+
+                    <input
+                        id="form-input"
+                        name="kayttaja_salasana"
+                        type="password"
+                        placeholder="Salasana"
+                        required onChange={ signupKirjoitusta }
                     />
 
                 </form>
@@ -80,7 +109,6 @@ const LoginSignup = () => {
                         className="login-signup-button"
                         form="signup-form"
                         onClick={() => {console.log("signuppi nappi")}}
-                        // tähän joku funktio mikä lähettää formin kamat eteenpäi
                         >Luo käyttäjä
                     </button>
 

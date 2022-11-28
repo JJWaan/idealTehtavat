@@ -8,13 +8,13 @@ const saltRounds = 10;
 
 // Signup route
 router.post("/", async (request, response, next) => {
-    const { email, password } = request.body;
+    const { nimi, email, password } = request.body;
     let result;
     try {
         let hashed = await bcrypt.hash(password, saltRounds)
         result = await pool.query(
-            "INSERT INTO kayttaja (user_email, user_password) VALUES ($1,$2) RETURNING user_id",
-            [email, hashed]
+            "INSERT INTO kayttaja (user_nimi, user_email, user_password) VALUES ($1, $2, $3) RETURNING user_id",
+            [nimi, email, hashed]
         );
         console.log(`Query ${result.command} completed succesfully`);
         console.log(`Query made to: ${request.protocol}://${request.get('host')}${request.originalUrl}`);
@@ -25,7 +25,10 @@ router.post("/", async (request, response, next) => {
     let token;
     try {
         token = jwt.sign(
-            { userId: result.rows[0].user_id, email: email },
+            {   userId: result.rows[0].user_id,
+                email: email,
+                nimi: nimi
+            },
             "secretkeyappearshere",
             { expiresIn: "1h" }
         );
@@ -38,6 +41,7 @@ router.post("/", async (request, response, next) => {
         data: {
             userId: result.rows[0].user_id,
             email: email,
+            nimi: nimi,
             token: token
         }
     });
