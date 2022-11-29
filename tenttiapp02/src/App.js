@@ -6,25 +6,21 @@ import MainHeader from './MainHeaderElement';
 import NavbarTop from './NavbarTop';
 import MainFooter from './MainFooterElement';
 
-import LoginSignup from './LoginComponent';
+import LandingPage from './LandingPage';
 import TenttiEtusivuWithServerAndDatabase from './TenttiEtusivuWithServerAndDatabase';
 
 function App() {
-  const [onxTokee, setOnxTokee] = useState(localStorage.getItem("jwt-tokeni"));
+  const [tokenExists, setTokenExists] = useState(localStorage.getItem("jwt-tokeni"));
+
+  const TokenSetter = (tokenExists) => {
+    setTokenExists(tokenExists);
+  };
 
   return (
-    
-      onxTokee ?
       <>
-        <MainHeader />
-        <NavbarTop />
-        <TenttiEtusivuWithServerAndDatabase />
-      </>
-      :
-      <>
-        <MainHeader />
-        <NavbarTop />
-        <LoginSignup />
+        {/* <MainHeader /> */}
+        <LandingPage />
+        { tokenExists ? <> <NavbarTop tokensetter={TokenSetter} /> <TenttiEtusivuWithServerAndDatabase /> </> : null }
         <MainFooter />
       </>
 

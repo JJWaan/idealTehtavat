@@ -54,8 +54,8 @@ const kaikkiTentit = tentti.resTentti.map((item, i) => { return (
 
 return (
   <div className="tentti-container">
-    placeholder
-    {/* {kaikkiTentit} */}
+    {/* placeholder */}
+    {kaikkiTentit}
     {/* <Kysymys kaikkidata={tentti}/> */}
   </div>
   );

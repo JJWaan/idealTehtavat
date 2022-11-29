@@ -1,7 +1,8 @@
-import React from "react";
-
 import { useState } from "react";
 import axios from "axios";
+
+// login and signup logics and forms.
+// one of the main elements for LandingPage.js
 
 const LoginSignup = () => {
 
@@ -22,6 +23,7 @@ const LoginSignup = () => {
             });
 
             localStorage.setItem("jwt-tokeni", data.kekkonen.token);
+            console.log('User logged in with:', data);
         }
         catch (error) { console.log("Login error:", error) }
     };
@@ -42,94 +44,98 @@ const LoginSignup = () => {
                 email: signup.kayttaja_email,
                 password: signup.kayttaja_salasana,
             });
-            console.log("Uusi käyttäjä luotu ja tallennettu datalla:", data);
+            console.log('New user created & saved to database with:', data);
             setSignup({ kayttaja_nimi: "", kayttaja_email: "", kayttaja_salasana: "" });
         }
-        catch (error) { console.log("Signup error:", error); }
+        catch (error) { console.log('Signup error:', error); }
     };
 
-    // okay?:
-    const [onkToukkenii, setOnkToukkenii] = useState(null)
+    // state to give the user feedback @ UI after button-click :
+    const [buttonClicked, setButtonClicked] = useState(null)
 
-    const OptimusPrime = () => {
+    const ShowFeedback = () => {
+        // on form button click, auto-scroll to next element
+        const skrollaaja = document.querySelector('#skroll');
+            skrollaaja.scrollIntoView({
+                behavior: 'smooth'
+        });
+        // and view a info-box
         return (
-            <div className="optimusPrime">
-                <p>no ainaki nappulaa painoit ei kait siinä</p>
+            <div className="show-feedback">
+                <p>UI feedback for user</p>
             </div>
         );
-    }
+    };
 
     return (
         <>
+            <div className="forms-container">
 
-        {onkToukkenii ? <OptimusPrime /> : null}
+                {buttonClicked ? <ShowFeedback /> : null}
 
-        <div className="forms-container">
+                <div className="form-container">
+                    <form id="login-form" onSubmit={ loginPostaaja }>
+                        <input
+                            id="form-input"
+                            name="kayttaja_id"
+                            type="text"
+                            placeholder="Sähköpostiosoitteesi"
+                            required onChange={ loginKirjoitusta }
+                        />
 
-            <div className="form-container">
-                <form id="login-form" onSubmit={ loginPostaaja }>
-                    <input
-                        id="form-input"
-                        name="kayttaja_id"
-                        type="text"
-                        placeholder="Sähköpostiosoitteesi"
-                        required onChange={ loginKirjoitusta }
-                    />
+                        <input
+                            id="form-input"
+                            name="kayttaja_salasana"
+                            type="password"
+                            placeholder="Salanasi"
+                            required onChange={ loginKirjoitusta }
+                        />
+                    </form>
+                        <button
+                            className="login-signup-button"
+                            form="login-form"
+                            onClick={ () => setButtonClicked(true) }
+                            >Kirjaudu sisään
+                        </button>
+                </div>
 
-                    <input
-                        id="form-input"
-                        name="kayttaja_salasana"
-                        type="password"
-                        placeholder="Salanasi"
-                        required onChange={ loginKirjoitusta }
-                    />
-                </form>
-                    <button
-                        className="login-signup-button"
-                        form="login-form"
-                        onClick={() => setOnkToukkenii(true) }
-                        >Kirjaudu sisään
-                    </button>
+                <div className="form-container">
+                    <form id="signup-form" onSubmit={ signupPostaaja }>
+                        <input
+                            id="form-input"
+                            name="kayttaja_nimi"
+                            type="text"
+                            placeholder="Uusi käyttäjänimi"
+                            required onChange={ signupKirjoitusta }
+                        />
+
+                        <input
+                            id="form-input"
+                            name="kayttaja_email"
+                            type="email"
+                            placeholder="Sähköpostiosoitteesi"
+                            required onChange={ signupKirjoitusta }
+                        />
+
+                        <input
+                            id="form-input"
+                            name="kayttaja_salasana"
+                            type="password"
+                            placeholder="Uusi salasana"
+                            required onChange={ signupKirjoitusta }
+                        />
+
+                    </form>
+                        <button
+                            className="login-signup-button"
+                            form="signup-form"
+                            onClick={() => setButtonClicked(true) }
+                            >Luo käyttäjä
+                        </button>
+
+                </div>
             </div>
-
-            <div className="form-container">
-                <form id="signup-form" onSubmit={ signupPostaaja }>
-                    <input
-                        id="form-input"
-                        name="kayttaja_nimi"
-                        type="text"
-                        placeholder="Uusi käyttäjänimi"
-                        required onChange={ signupKirjoitusta }
-                    />
-
-                    <input
-                        id="form-input"
-                        name="kayttaja_email"
-                        type="email"
-                        placeholder="Sähköpostiosoitteesi"
-                        required onChange={ signupKirjoitusta }
-                    />
-
-                    <input
-                        id="form-input"
-                        name="kayttaja_salasana"
-                        type="password"
-                        placeholder="Uusi salasana"
-                        required onChange={ signupKirjoitusta }
-                    />
-
-                </form>
-                    <button
-                        className="login-signup-button"
-                        form="signup-form"
-                        onClick={() => setOnkToukkenii(true) }
-                        >Luo käyttäjä
-                    </button>
-
-            </div>
-
-        </div>
-
+        <div className="skroll" id="skroll"></div>
         </>
     )
 };

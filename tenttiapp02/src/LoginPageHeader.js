@@ -3,7 +3,7 @@ import React from "react";
 const LandingPageHeader = () => {
     return (
         <>
-            <div className="landing-page-header">
+            <div className="login-page-header">
                 <h1>tenttimesta.com</h1>
                 <p>Tenttimesta auttaa sinua</p>
                 <p>kehittymään paremmaksi ihmiseksi.</p>
