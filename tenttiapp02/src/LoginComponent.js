@@ -4,10 +4,10 @@ import axios from "axios";
 // login and signup logics and forms.
 // one of the main elements for LandingPage.js
 
-const LoginSignup = () => {
+const LoginSignup = ({ tokensetter }) => {
 
     // login:
-    const [login, setLogin] = useState({ kayttaja_id: "", kayttaja_salasana: "" })
+    const [login, setLogin] = useState({ kayttaja_email: "", kayttaja_salasana: "" })
 
     const loginKirjoitusta = (kirjoitus) => {
         const { name, value } = kirjoitus.target
@@ -18,12 +18,14 @@ const LoginSignup = () => {
         event.preventDefault();
         try {
             const { data } = await axios.post("https://localhost:4000/login", {
-                email: login.kayttaja_id,
+                email: login.kayttaja_email,
                 password: login.kayttaja_salasana,
             });
 
             localStorage.setItem("jwt-tokeni", data.kekkonen.token);
             console.log('User logged in with:', data);
+            localStorage.setItem("loggedin-kayttajanimi", data.kekkonen.usernimi)
+            // tokensetter(true)
         }
         catch (error) { console.log("Login error:", error) }
     };
@@ -53,6 +55,11 @@ const LoginSignup = () => {
     // state to give the user feedback @ UI after button-click :
     const [buttonClicked, setButtonClicked] = useState(null)
 
+    const tuplapukki = () => {
+        setButtonClicked(true);
+        tokensetter();
+    };
+
     const ShowFeedback = () => {
         // on form button click, auto-scroll to next element
         const skrollaaja = document.querySelector('#skroll');
@@ -77,10 +84,10 @@ const LoginSignup = () => {
                     <form id="login-form" onSubmit={ loginPostaaja }>
                         <input
                             id="form-input"
-                            name="kayttaja_id"
+                            name="kayttaja_email"
                             type="text"
                             placeholder="Sähköpostiosoitteesi"
-                            required onChange={ loginKirjoitusta }
+                            onChange={ loginKirjoitusta }
                         />
 
                         <input
@@ -88,13 +95,13 @@ const LoginSignup = () => {
                             name="kayttaja_salasana"
                             type="password"
                             placeholder="Salanasi"
-                            required onChange={ loginKirjoitusta }
+                            onChange={ loginKirjoitusta }
                         />
                     </form>
                         <button
                             className="login-signup-button"
                             form="login-form"
-                            onClick={ () => setButtonClicked(true) }
+                            onClick={ () => tuplapukki() }
                             >Kirjaudu sisään
                         </button>
                 </div>
@@ -106,7 +113,7 @@ const LoginSignup = () => {
                             name="kayttaja_nimi"
                             type="text"
                             placeholder="Uusi käyttäjänimi"
-                            required onChange={ signupKirjoitusta }
+                            onChange={ signupKirjoitusta }
                         />
 
                         <input
@@ -114,7 +121,7 @@ const LoginSignup = () => {
                             name="kayttaja_email"
                             type="email"
                             placeholder="Sähköpostiosoitteesi"
-                            required onChange={ signupKirjoitusta }
+                            onChange={ signupKirjoitusta }
                         />
 
                         <input
@@ -122,7 +129,7 @@ const LoginSignup = () => {
                             name="kayttaja_salasana"
                             type="password"
                             placeholder="Uusi salasana"
-                            required onChange={ signupKirjoitusta }
+                            onChange={ signupKirjoitusta }
                         />
 
                     </form>

@@ -98,6 +98,7 @@ h1,h2,h3,h4,h5 {
   lives inside .forms-container / LoginComponent.js */
 .skroll {
   color: black;
+  position: relative;
 }
 
 /* UI feedback element on btn click @ logincomponents forms */
@@ -189,6 +190,7 @@ nav p {
 
 nav p:hover {
   background-color: #023047;
+  cursor: pointer;
 }
 
 /* left navbar */

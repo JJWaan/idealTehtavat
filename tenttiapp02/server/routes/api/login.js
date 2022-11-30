@@ -14,8 +14,10 @@ router.post("/", async (request, response, next) => {
         existingUser = {
             password: result.rows[0].user_password,
             email: result.rows[0].user_email,
-            id: result.rows[0].user_id
+            id: result.rows[0].user_id,
+            nimi: result.rows[0].user_nimi
         };
+        console.log(existingUser)
         console.log(`Query ${result.command} completed succesfully`);
         console.log(`Query made to: ${request.protocol}://${request.get('host')}${request.originalUrl}`);
         passwordMatch = await bcrypt.compare(password, existingUser.password);
@@ -43,12 +45,13 @@ router.post("/", async (request, response, next) => {
         console.error(error);
         return next();
     }
- 
+
     response.status(200).json({
         success: true,
         kekkonen: {
-            userId: existingUser.user_id,
-            email: existingUser.user_email,
+            userId: existingUser.id,
+            usernimi: existingUser.nimi,
+            email: existingUser.email,
             token: token,
         }
     });

@@ -6,12 +6,12 @@ import LoginSignup from "./LoginComponent";
 // this exists as a parent render component that renders needed/wanted elements,
 // for easier control over child-components and to make code cleaner.
 
-const LandingPage = () => {
+const LandingPage = ({ tokensetter }) => {
     return (
         <div className="landing-page">
             <div className="landing-page-wrapper">
                 <LoginPageHeader />
-                <LoginSignup />
+                <LoginSignup tokensetter={tokensetter} />
             </div>
         </div>
     );
