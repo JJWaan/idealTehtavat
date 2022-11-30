@@ -8,12 +8,12 @@ import LoginSignup from "./LoginComponent";
 
 const LandingPage = ({ tokensetter }) => {
     return (
-        <div className="landing-page">
+        // <div className="landing-page">
             <div className="landing-page-wrapper">
                 <LoginPageHeader />
                 <LoginSignup tokensetter={tokensetter} />
             </div>
-        </div>
+        // </div>
     );
 };
 
