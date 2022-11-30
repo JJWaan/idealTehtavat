@@ -55,18 +55,28 @@ const LoginSignup = ({ tokensetter }) => {
     // state to give the user feedback @ UI after button-click :
     const [buttonClicked, setButtonClicked] = useState(null)
 
-    const tuplapukki = () => {
+    // auto-scroller for better ux
+    function scroller() {
+        const skrollaaja = document.querySelector('#skroll');
+        skrollaaja.scrollIntoView({
+            behavior: 'smooth'
+        });
+    }
+    // timer for auto-scroller
+    const letsScroll = () => {
+        const scrollerTimeout = setTimeout(scroller, 1500);
+        function myStopFunction() {
+            clearTimeout(scrollerTimeout);
+        }
+    }
+
+    const onLoginButtonClick = () => {
         setButtonClicked(true);
         tokensetter();
+        letsScroll();
     };
 
     const ShowFeedback = () => {
-        // on form button click, auto-scroll to next element
-        const skrollaaja = document.querySelector('#skroll');
-            skrollaaja.scrollIntoView({
-                behavior: 'smooth'
-        });
-        // and view a info-box
         return (
             <div className="show-feedback">
                 <p>UI feedback for user</p>
@@ -101,7 +111,7 @@ const LoginSignup = ({ tokensetter }) => {
                         <button
                             className="login-signup-button"
                             form="login-form"
-                            onClick={ () => tuplapukki() }
+                            onClick={ () => onLoginButtonClick() }
                             >Kirjaudu sisään
                         </button>
                 </div>
