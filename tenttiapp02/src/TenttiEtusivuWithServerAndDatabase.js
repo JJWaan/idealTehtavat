@@ -93,15 +93,30 @@ const TenttiEtusivuWithServerAndDB = () => {
     //   if(tentti.seivataan === true) { tallennaServulle(); };
     // }, [tentti.seivataan]);
 
-  console.log('tenttiState vielä kerran ennen renderiä:', tenttiState);
-  console.log(`<Tentti tentti={tenttiState.stateData} /> ,
-    tenttiStaten stateData mitä tämä komponentti lähettää eteenpäin Tentti.js:lle propsina:`,
-    tenttiState.stateData)
+  // mapataan databasesta saadut kaikki tentit,
+  // ja filteröidään sieltä kaikki kysymykset missä tentin id:t kohtaavat tauluissa.
+  // palautetaan <Tentti /> komponentteja sen perusteella.
+  const kaikkiTentit = tenttiState.stateData?.resTentti.map((item) => {
+    const kysymyksienFilterointi = tenttiState.stateData.resLiitos.filter(liitositem => {
+        if(liitositem.tentin_id === item.tentti_id) {
+          return (liitositem.kysymyksen_id)
+        };
+    });
+    return (
+      <Tentti
+        key={item.tentti_id}
+        id={item.tentti_id}
+        tentti={item}
+        kaikkiliitos={tenttiState.stateData.resLiitos}
+        kaikkivastaukset={tenttiState.stateData.resVastaus}
+        filtteroidytKysymykset={kysymyksienFilterointi}
+      />
+    )});
 
   return (
     <div className='main-grid-wrapper'>
       <NavbarLeft />
-        {tenttiState.isInitialized === true ? <> <Tentti tentti={tenttiState.stateData} /> </> : <LoadingScreen />}
+        {tenttiState.isInitialized === true ? <div className="tenttien-container"> {kaikkiTentit} </div> : <LoadingScreen />}
       <StatusbarRight />
     </div>
   );

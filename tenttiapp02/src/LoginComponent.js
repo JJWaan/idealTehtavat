@@ -24,8 +24,16 @@ const LoginSignup = ({ tokensetter }) => {
 
             localStorage.setItem("jwt-tokeni", data.kekkonen.token);
             console.log('User logged in with:', data);
-            localStorage.setItem("loggedin-kayttajanimi", data.kekkonen.usernimi)
-            // tokensetter(true)
+            // this doesn't work, returns [object Object] :
+            // localStorage.setItem("loggedin-kayttajadata", {
+            //     kayttajanimi: data.kekkonen.usernimi,
+            //     kayttajaid: data.kekkonen.userId,
+            //     kayttajaemail: data.kekkonen.email
+            // });
+            // so instead:
+            localStorage.setItem("loggedin-kayttajanimi", data.kekkonen.usernimi);
+            localStorage.setItem("loggedin-kayttajaid", data.kekkonen.userId);
+            localStorage.setItem("loggedin-kayttajaemail", data.kekkonen.email);
         }
         catch (error) { console.log("Login error:", error) }
     };
@@ -53,7 +61,7 @@ const LoginSignup = ({ tokensetter }) => {
     };
 
     // state to give the user feedback @ UI after button-click :
-    const [buttonClicked, setButtonClicked] = useState(null)
+    const [buttonClicked, setButtonClicked] = useState(null);
 
     // auto-scroller for better ux
     function scroller() {
@@ -79,7 +87,7 @@ const LoginSignup = ({ tokensetter }) => {
     const ShowFeedback = () => {
         return (
             <div className="show-feedback">
-                <p>UI feedback for user</p>
+                <p>Tervetuloa!</p>
             </div>
         );
     };
@@ -87,8 +95,6 @@ const LoginSignup = ({ tokensetter }) => {
     return (
         <>
             <div className="forms-container">
-
-                {buttonClicked ? <ShowFeedback /> : null}
 
                 <div className="form-container">
                     <form id="login-form" onSubmit={ loginPostaaja }>
@@ -152,6 +158,7 @@ const LoginSignup = ({ tokensetter }) => {
 
                 </div>
             </div>
+            {buttonClicked ? <ShowFeedback /> : null}
         <div className="skroll" id="skroll"></div>
         </>
     )

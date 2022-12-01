@@ -31,8 +31,9 @@ h1,h2,h3,h4,h5 {
   for NavLeft & Tentti.js & right-statusbar */
 .main-grid-wrapper {
   display: grid;
-  grid-template-columns: 15% 70% 15%;
-  grid-template-rows: 100%; /* max content ? */
+  grid-template-columns: 10% auto 15%;
+  /* grid-template-rows: 100%; */
+  justify-content: center;
   background-color:#8ecae6;
 }
 
@@ -40,12 +41,12 @@ h1,h2,h3,h4,h5 {
 
 /* component specific styles */
 
-/* initial page render-area container (used in LandingPage.js) */
-.landing-page {
+/* initial page render-area container (used in LandingPage.js) (not used now) */
+/* .landing-page {
   width: 100%;
   height: 100%;
-  /* background-color: #023047; */
-}
+  background-color: #023047;
+} */
 
 /* this wraps header & forms-containers */
 .landing-page-wrapper {
@@ -53,10 +54,10 @@ h1,h2,h3,h4,h5 {
   height: 100%;
   display: grid;
   grid-template-columns: 50% 50%;
-  grid-template-rows: auto 1%;
-  /* padding: 2rem; */
-  /* background-color: #023047; */
+  grid-template-rows: auto 10% 1%;
+  /* align-items: center; */
   background-image: linear-gradient(to bottom right, #023047, #084462, #8ecae6);
+  background-color: #023047;
 }
 
 .login-page-header {
@@ -91,21 +92,27 @@ h1,h2,h3,h4,h5 {
 #login-form, #signup-form {
   width: 100%;
   padding: 1rem;
-  /* background-color: pink; */
-}
-
-/* (temporary) div for auto-scroll on btn click @ logincomponents forms,
-  lives inside .forms-container / LoginComponent.js */
-.skroll {
-  color: black;
-  position: relative;
 }
 
 /* UI feedback element on btn click @ logincomponents forms */
 .show-feedback {
-  background-color: red;
-  max-height: 20%;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  margin-left: 50%; /* centers this box */
+  margin-bottom: 20%;
+  border-radius: 1rem;
+  background-color: #48B636;
+  box-shadow: 0.1rem 0.1rem 0.4rem 0.1rem #a2ff93 inset;
 }
+
+/* div for auto-scroll on login-btn click,
+  lives inside .forms-container / LoginComponent.js */
+  .skroll {
+    position: relative;
+  }
 
 /* -- -- -- -- */
 
@@ -115,15 +122,27 @@ h1,h2,h3,h4,h5 {
   padding: 1rem;
   margin: 0.5rem;
   background-color: #8ecae6;
+  border: 0;
   border-radius: 1rem;
+}
+
+#form-input:hover {
+  box-shadow: 0.1rem 0.1rem 0.2rem 0.1rem #023047 inset;
 }
 
 /* all buttons in login-component: */
 .login-signup-button {
   max-width: 100%;
   padding: 1rem;
+  color: white;
+  border: 0;
   background-color: #48B636;
+  box-shadow: 0.1rem 0.1rem 0.4rem 0.1rem #89e87a inset;
   border-radius: 1rem;
+}
+
+.login-signup-button:hover {
+  background-color: #55d641;
 }
 
 /* -- -- -- -- */
@@ -194,7 +213,13 @@ nav p:hover {
   cursor: pointer;
 }
 
-/* left navbar */
+/* p tagit top navbarin sisällä */
+.kayttajainfo {
+  padding: 1rem;
+  color: white;
+}
+
+/* horizontal navbars */
 .nav-left, .nav-right {
   /* position: relative; */
   display: flex;
@@ -202,7 +227,9 @@ nav p:hover {
   width: 100%;
   align-items: center;
   padding: 1rem;
+  margin: 1rem;
   background-color: #8ecae6;
+  /* border: 1px solid black; */
   /* visibility: hidden; */
 
   /* with transition */
@@ -259,74 +286,52 @@ nav p:hover {
 
 /* --- --- --- ---*/
 
-/* tentti render */
-.tentti-container {
+/* tentti */
+
+.tenttien-container {
   width: 100%;
-  margin: 0 auto;
-  padding: 0.5rem;
-  background-color: #8ecae6;
+  margin: 0;
+  padding: 0;
 }
 
 .tentti {
   width: 100%;
-  /* margin: 0 auto; */
-  margin-bottom: 0.5rem;
+  margin: 0.5rem;
   padding: 2rem;
-  /* background-color: #023047; */
   background-image: linear-gradient(to bottom right, #023047, #084462, #8ecae6);
-  /* border: 0.1rem solid #fff; */
+  background-color: #023047; /* fallback bg color for browser-support */
   border-radius: 1rem;
 }
 
 .tentti:hover {
-  /* border: 0.1rem solid #b9e8fd; */
   box-shadow: 0.1rem 0.1rem 0.4rem 0.1rem #64defc inset;
 }
 
-/* these are used within .tentti, specific styles */
 .tentti-title {
-  margin: 0;
-  padding: 1rem;
   font-size: 2.2rem;
   text-shadow: -0.1em 0 #000, 0 0.1em #000, 0.1em 0 #000, 0 -0.1em black;
-}
-
-.tentti-id, .kysymys-id, .vastaus-id {
-  font-size: 0.6rem;
 }
 
 .tentti-desc {
   padding-left: 1rem;
   padding-bottom: 1rem;
-  /* padding: 3rem; */
   font-size: 1.2rem;
 }
 
-.tentti p {
+.tentti p, span {
   color: white;
 }
 
-.tentti span {
-  color: white;
+.tentti-id, .kysymys-id, .vastaus-id {
+  font-size: 0.6rem;
+  margin-left: 0.5rem;
 }
 
 /* kysymys */
 
-/* k container */
-.kysymykset {
-  /* margin-bottom: 1rem; */
-  padding: 2rem;
-  border: 0.01em solid #64defc;
-  border-radius: 1rem;
-}
-
-.kysymykset:hover {
-  /* border: 0.1rem solid #b9e8fd; */
-  box-shadow: 0.1rem 0.1rem 0.6rem 0.1rem #64defc inset;
-}
-
-/* single mapped/rendered element */
 .kysymys {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 0.5rem;
   padding: 1rem;
   border-radius: 1rem;
@@ -338,9 +343,7 @@ nav p:hover {
 }
 
 .kysymys-title {
-  padding-top: 2rem;
-  padding-left: 2rem;
-  margin-bottom: 0;
+  padding: 1rem;
   font-size: 1.4rem;
   font-weight: 300;
   text-decoration: underline;
@@ -348,21 +351,10 @@ nav p:hover {
 
 /* vaihtikset */
 
-/* v container */
-.vastaukset {
-  padding-top: 1rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  /* border: 0.01em solid pink; */
-  border-radius: 1rem;
-}
-
-/* single mapped/rendered element */
 .vaihtoehto {
-  margin-bottom: 0.5rem;
+  /* margin-bottom: 0.5rem; */
   padding: 1rem;
   border-radius: 1rem;
-  /* border: 0.01rem solid #64defc; */
   cursor: pointer;
 }
 
@@ -371,6 +363,5 @@ nav p:hover {
 }
 
 .vastaus-teksti {
-  /* background-color: #48B636; */
-  padding-right: 2rem;
+  padding-left: 2rem;
 }
