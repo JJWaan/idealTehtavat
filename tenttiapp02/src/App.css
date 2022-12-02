@@ -31,7 +31,7 @@ h1,h2,h3,h4,h5 {
   for NavLeft & Tentti.js & right-statusbar */
 .main-grid-wrapper {
   display: grid;
-  grid-template-columns: 10% auto 15%;
+  grid-template-columns: 15% auto 15%;
   /* grid-template-rows: 100%; */
   justify-content: center;
   background-color:#8ecae6;
@@ -227,7 +227,7 @@ nav p:hover {
   width: 100%;
   align-items: center;
   padding: 1rem;
-  margin: 1rem;
+  /* margin: 1rem; */
   background-color: #8ecae6;
   /* border: 1px solid black; */
   /* visibility: hidden; */
@@ -239,20 +239,25 @@ nav p:hover {
 }
 
   /* with anim */
-.nav-left:hover {
+/* .nav-left:hover {
   animation-name: nav-left-shrink;
   animation-duration: 1s;
   animation-delay: 0.1s;
   animation-iteration-count: 1;
   animation-timing-function: ease;
   animation-fill-mode: forwards;
-  /* forwards:
-  Let the div element retain the style values set by the last keyframe when the animation ends
-  */
+} */
+
+.nav-left p {
+  padding: 1rem;
+  margin: 0;
+  width: 100%;
+  border-radius: 1rem;
 }
 
-.nav-left div:hover {
-  background-color: pink;
+.nav-left p:hover {
+  background-color: #023047;
+  cursor: pointer;
 }
 
 @keyframes nav-left-shrink {
@@ -266,18 +271,26 @@ nav p:hover {
 
 /* right status bar */
 
-.nav-right div:hover {
-  background-color: pink;
+.nav-right p {
+  padding: 1rem;
+  margin: 0;
+  width: 100%;
+  border-radius: 1rem;
 }
 
-.nav-right:hover {
+.nav-right p:hover {
+  background-color: #023047;
+  cursor: pointer;
+}
+
+/* .nav-right:hover {
   animation-name: nav-right-shrink;
   animation-duration: 1s;
   animation-delay: 0.1s;
   animation-iteration-count: 1;
   animation-timing-function: ease;
   animation-fill-mode: forwards;
-}
+} */
 
 @keyframes nav-right-shrink {
   from {
@@ -295,12 +308,13 @@ nav p:hover {
 .tenttien-container {
   width: 100%;
   margin: 0;
-  padding: 0;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .tentti {
   width: 100%;
-  margin: 0.5rem;
+  margin-bottom: 0.5rem;
   padding: 2rem;
   background-image: linear-gradient(to bottom right, #023047, #084462, #8ecae6);
   background-color: #023047; /* fallback bg color for browser-support */
