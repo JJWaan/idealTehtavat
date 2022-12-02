@@ -1,23 +1,12 @@
-const NavbarLeft = ( { tentti } ) => {
-    // const tentinNimi = tentti.map((item, i) => { return (
-    //     <div key={i}>
-    //         <p>{item.tentti_nimi}</p>
-    //     </div>
-    //   )});
+const NavbarLeft = ( { tentit } ) => {
+    
+    const puretut = tentit?.map((item) => {
+        return <div key={item.tentti_id}><p key={item.tentti_id}>{item.tentti_nimi}</p></div>
+    });
 
     return (
         <div className="nav-left">
-            {/* <div>{tentinNimi}</div> */}
-            <div><p>tentin nimi</p></div>
-            <div><p>tentin nimi</p></div>
-            <div><p>tentin nimi</p></div>
-            <div><p>tentin nimi</p></div>
-            <div><p>tentin nimi</p></div>
-            <div><p>tentin nimi</p></div>
-            <div>vain div</div>
-            <div>vain div</div>
-            <div>vain div</div>
-            <div>vain div</div>
+            {puretut}
         </div>
     )
 };

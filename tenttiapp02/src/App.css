@@ -251,6 +251,10 @@ nav p:hover {
   */
 }
 
+.nav-left div:hover {
+  background-color: pink;
+}
+
 @keyframes nav-left-shrink {
   from {
     transform: translate(0%, 0%);
@@ -335,7 +339,7 @@ nav p:hover {
   margin-bottom: 0.5rem;
   padding: 1rem;
   border-radius: 1rem;
-  border: 0.01rem solid #64defc;
+  /* border: 0.01rem solid #64defc; */
 }
 
 .kysymys:hover {

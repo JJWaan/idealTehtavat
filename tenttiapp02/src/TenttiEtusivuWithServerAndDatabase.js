@@ -115,7 +115,7 @@ const TenttiEtusivuWithServerAndDB = () => {
 
   return (
     <div className='main-grid-wrapper'>
-      <NavbarLeft />
+      <NavbarLeft tentit={tenttiState.stateData?.resTentti} />
         {tenttiState.isInitialized === true ? <div className="tenttien-container"> {kaikkiTentit} </div> : <LoadingScreen />}
       <StatusbarRight />
     </div>
