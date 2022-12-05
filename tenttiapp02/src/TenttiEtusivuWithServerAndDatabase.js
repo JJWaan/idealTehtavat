@@ -3,10 +3,10 @@ import React, { useReducer, useEffect } from "react";
 import axios from "axios";
 
 // import components
-import NavbarLeft from "./NavbarLeft";
 import LoadingScreen from "./LoadingScreen";
 import Tentti from './Tentti';
-import StatusbarRight from "./StatusbarRight";
+import NavbarTop from "./NavbarTop";
+import MainFooter from "./MainFooterElement";
 
 // // //
 
@@ -58,18 +58,18 @@ const reducer = (state, action) => {
 };
 
 // main function, component
-const TenttiEtusivuWithServerAndDB = () => {
+const TenttiEtusivuWithServerAndDB = ({ tokensetter }) => {
   const [tenttiState, dispatch] = useReducer(reducer, mainstate);
   console.log('alkuperäinen state (tenttiState):', tenttiState);
   useEffect(() => {
       const getDB = async() => {
           try {
-              let dbData = await axios.get('https://localhost:4000/initial')
-                console.log("get, tämä lähtee dispatchina dbData.data:", dbData.data);
+              let getInitialDataFromDB = await axios.get('https://localhost:4000/initial')
+                console.log("get, tämä lähtee dispatchina (getInitialDataFromDB.data):", getInitialDataFromDB.data);
               dispatch({
                 type: 'INIT_DATA',
                 payload: {
-                  stateData: dbData.data,
+                  stateData: getInitialDataFromDB.data,
                   initialized: true
                 }
               })
@@ -114,19 +114,12 @@ const TenttiEtusivuWithServerAndDB = () => {
     )});
 
   return (
-    <div className='main-grid-wrapper'>
-      <NavbarLeft tentit={tenttiState.stateData?.resTentti} />
-        {tenttiState.isInitialized === true ? <div className="tenttien-container"> {kaikkiTentit} </div> : <LoadingScreen />}
-      <StatusbarRight />
+    <div className='new-main-wrapper'>
+      <NavbarTop tokensetter={tokensetter} tentit={tenttiState.stateData?.resTentti} />
+      {tenttiState.isInitialized === true ? <div className="tenttien-container"> {kaikkiTentit} </div> : <LoadingScreen />}
+      <MainFooter />
     </div>
   );
 };
 
 export default TenttiEtusivuWithServerAndDB;
-
-// arkkitehtuuri:
-// index
-// --> App
-// --> TenttiEtusivuWithServerAndDatabase (tämä filu)
-// --> Tentti
-// ---> Kysymys

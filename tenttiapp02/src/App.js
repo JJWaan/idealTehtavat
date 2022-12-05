@@ -20,14 +20,22 @@ function App() {
   };
 
   return (
+      // <>
+      //   <LandingPage tokensetter={TokenSetter} />
+      //   { tokenExists ?
+      //     <div className='main'>
+      //       <NavbarTop tokensetter={TokenSetterFalse} />
+      //       <TenttiEtusivuWithServerAndDatabase />
+      //       <MainFooter />
+      //     </div>
+      //   : null }
+      // </>
       <>
         <LandingPage tokensetter={TokenSetter} />
         { tokenExists ?
-          <>
-            <NavbarTop tokensetter={TokenSetterFalse} />
-            <TenttiEtusivuWithServerAndDatabase />
-            <MainFooter />
-          </>
+          <div className='main'>
+            <TenttiEtusivuWithServerAndDatabase tokensetter={TokenSetterFalse} />
+          </div>
         : null }
       </>
 

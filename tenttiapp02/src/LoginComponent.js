@@ -56,12 +56,15 @@ const LoginSignup = ({ tokensetter }) => {
             });
             console.log('New user created & saved to database with:', data);
             setSignup({ kayttaja_nimi: "", kayttaja_email: "", kayttaja_salasana: "" });
+            localStorage.setItem("signedup-kayttajanimi", data.data.nimi);
+            localStorage.setItem("signedup-kayttajaemail", data.data.email);
         }
         catch (error) { console.log('Signup error:', error); }
     };
 
-    // state to give the user feedback @ UI after button-click :
-    const [buttonClicked, setButtonClicked] = useState(null);
+    // states to give the user feedback @ UI after button-click :
+    const [loginButtonClicked, setLoginButtonClicked] = useState(null);
+    const [signupButtonClicked, setSignupButtonClicked] = useState(null);
 
     // auto-scroller for better ux
     function scroller() {
@@ -75,19 +78,36 @@ const LoginSignup = ({ tokensetter }) => {
         const scrollerTimeout = setTimeout(scroller, 1500);
         function myStopFunction() {
             clearTimeout(scrollerTimeout);
-        }
-    }
+        };
+    };
+
+    const onSignupButtonClick = () => {
+        setSignupButtonClicked(true);
+    };
 
     const onLoginButtonClick = () => {
-        setButtonClicked(true);
+        setLoginButtonClicked(true);
         tokensetter();
         letsScroll();
     };
 
-    const ShowFeedback = () => {
+    const ShowLoginFeedback = () => {
+        const loggedinKayttajanimi = localStorage.getItem("loggedin-kayttajanimi")
         return (
             <div className="show-feedback">
-                <p>Tervetuloa!</p>
+                <p>Tervetuloa {loggedinKayttajanimi}!</p>
+            </div>
+        );
+    };
+
+    const ShowSignupFeedback = () => {
+        const signeupKayttajanimi = localStorage.getItem("signedup-kayttajanimi");
+        const signedupEmail = localStorage.getItem("signedup-kayttajaemail");
+        return (
+            <div className="show-feedback">
+                {/* <p>Käyttäjä luotu onnistuneesti.</p> */}
+                <p>Käyttäjä {signeupKayttajanimi} / {signedupEmail} luotu onnistuneesti.</p>
+                <p>Ole hyvä ja kirjaudu sisään!</p>
             </div>
         );
     };
@@ -152,14 +172,17 @@ const LoginSignup = ({ tokensetter }) => {
                         <button
                             className="login-signup-button"
                             form="signup-form"
-                            onClick={() => setButtonClicked(true) }
+                            onClick={() => onSignupButtonClick() }
                             >Luo käyttäjä
                         </button>
 
                 </div>
             </div>
-            {buttonClicked ? <ShowFeedback /> : null}
-        <div className="skroll" id="skroll"></div>
+
+            <div className="show-feedback-container">
+                {signupButtonClicked ? <ShowSignupFeedback /> : null}
+                {loginButtonClicked ? <ShowLoginFeedback /> : null}
+            </div>
         </>
     )
 };
