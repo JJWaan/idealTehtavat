@@ -17,6 +17,9 @@ const LoginSignup = ({ tokensetter }) => {
     const loginPostaaja = async (event) => {
         event.preventDefault();
         try {
+            if (!login.kayttaja_email || !login.kayttaja_salasana) {
+                throw new Error();
+            }
             const { data } = await axios.post("https://localhost:4000/login", {
                 email: login.kayttaja_email,
                 password: login.kayttaja_salasana,
@@ -49,6 +52,9 @@ const LoginSignup = ({ tokensetter }) => {
     const signupPostaaja = async (event) => {
         event.preventDefault();
         try {
+            if (!login.kayttaja_email || !login.kayttaja_salasana) {
+                throw new Error();
+            }
             const { data } = await axios.post("https://localhost:4000/signup", {
                 nimi: signup.kayttaja_nimi,
                 email: signup.kayttaja_email,
@@ -81,35 +87,89 @@ const LoginSignup = ({ tokensetter }) => {
         };
     };
 
+    // state handlers for UI feedback
     const onSignupButtonClick = () => {
         setSignupButtonClicked(true);
     };
 
+    const onSignupButtonClickFalse = () => {
+        setSignupButtonClicked(false);
+    };
+
     const onLoginButtonClick = () => {
         setLoginButtonClicked(true);
-        tokensetter();
-        letsScroll();
+    };
+
+    const onLoginButtonClickFalse = () => {
+        setLoginButtonClicked(false);
+    };
+
+    // timers for UI feedback
+    const loginFeedbackFadeout = () => {
+        const feedbackTimeout = setTimeout(onLoginButtonClickFalse, 4000);
+        function myStopFunction() {
+            clearTimeout(feedbackTimeout);
+        };
+    };
+
+    const signupFeedbackFadeout = () => {
+        const feedbackTimeout = setTimeout(onSignupButtonClickFalse, 4000);
+        function myStopFunction() {
+            clearTimeout(feedbackTimeout);
+        };
     };
 
     const ShowLoginFeedback = () => {
-        const loggedinKayttajanimi = localStorage.getItem("loggedin-kayttajanimi")
-        return (
-            <div className="show-feedback">
-                <p>Tervetuloa {loggedinKayttajanimi}!</p>
-            </div>
-        );
+        const loggedinKayttajanimi = localStorage.getItem("loggedin-kayttajanimi");
+
+        // yksi tapa validoida inputteja:
+        // const loggedinKayttajaemail = localStorage.getItem("loggedin-kayttajaemail");
+
+        // if (loggedinKayttajaemail == undefined) {
+        //     return (
+        //         <div className="show-feedback">
+        //             <p>Sähköpostiosoitteesi tarvitaan</p>
+        //         </div>
+        //     )
+
+        // toinen tapa, tutkitaan statea:
+        if (!login.kayttaja_email || !login.kayttaja_salasana) {
+            loginFeedbackFadeout();
+            return (
+                <div className="show-feedback">
+                    <p>Sähköpostiosoitteesi, sekä salasanasi tarvitaan kirjautumiseen</p>
+                </div>
+            )
+        } else {
+            tokensetter();
+            letsScroll();
+            return (
+                <div className="show-feedback">
+                    <p>Tervetuloa {loggedinKayttajanimi}!</p>
+                </div>
+            );
+        }
     };
 
     const ShowSignupFeedback = () => {
         const signeupKayttajanimi = localStorage.getItem("signedup-kayttajanimi");
         const signedupEmail = localStorage.getItem("signedup-kayttajaemail");
-        return (
-            <div className="show-feedback">
-                {/* <p>Käyttäjä luotu onnistuneesti.</p> */}
-                <p>Käyttäjä {signeupKayttajanimi} / {signedupEmail} luotu onnistuneesti.</p>
-                <p>Ole hyvä ja kirjaudu sisään!</p>
-            </div>
-        );
+
+        if (!signup.kayttaja_nimi || !signup.kayttaja_email || !signup.kayttaja_salasana) {
+            signupFeedbackFadeout();
+            return (
+                <div className="show-feedback">
+                    <p>Kaikki kentät vaaditaan rekisteröitymiseen.</p>
+                </div>
+            )
+        } else {
+            return (
+                <div className="show-feedback">
+                    <p>Käyttäjä {signeupKayttajanimi} // {signedupEmail} luotu onnistuneesti.</p>
+                    <p>Ole hyvä ja kirjaudu sisään!</p>
+                </div>
+            );
+        }
     };
 
     return (
