@@ -3,10 +3,7 @@ import { useState } from 'react';
 import './App.css';
 
 import LandingPage from './LandingPage';
-
-import NavbarTop from './NavbarTop';
 import TenttiEtusivuWithServerAndDatabase from './TenttiEtusivuWithServerAndDatabase';
-import MainFooter from './MainFooterElement';
 
 function App() {
   const [tokenExists, setTokenExists] = useState(localStorage.getItem("jwt-tokeni"));
@@ -20,22 +17,12 @@ function App() {
   };
 
   return (
-      // <>
-      //   <LandingPage tokensetter={TokenSetter} />
-      //   { tokenExists ?
-      //     <div className='main'>
-      //       <NavbarTop tokensetter={TokenSetterFalse} />
-      //       <TenttiEtusivuWithServerAndDatabase />
-      //       <MainFooter />
-      //     </div>
-      //   : null }
-      // </>
       <>
         <LandingPage tokensetter={TokenSetter} />
         { tokenExists ?
-          <div className='main'>
+          <main>
             <TenttiEtusivuWithServerAndDatabase tokensetter={TokenSetterFalse} />
-          </div>
+          </main>
         : null }
       </>
 

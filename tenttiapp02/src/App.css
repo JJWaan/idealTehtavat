@@ -19,23 +19,6 @@ h1,h2,h3,h4,h5 {
   text-shadow: 0.3rem 0.3rem 0.3rem #666;
 }
 
-/* main parent for tentti-content render area */
-main {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-}
-
-/* (used in TenttiEtusivu)
-  main grid setup for content render area,
-  for NavLeft & Tentti.js & right-statusbar */
-/* .main-grid-wrapper {
-  display: grid;
-  grid-template-columns: 15% auto 15%;
-  justify-content: center;
-  background-color: #8ecae6;
-} */
-
 .new-main-wrapper {
   display: flex;
   flex-direction: column;
@@ -47,20 +30,13 @@ main {
 
 /* component specific styles */
 
-/* initial page render-area container (used in LandingPage.js) (not used now) */
-/* .landing-page {
-  width: 100%;
-  height: 100%;
-  background-color: #023047;
-} */
-
 /* this wraps header & forms-containers */
 .landing-page-wrapper {
   width: 100%;
   height: 100%;
   display: grid;
-  grid-template-columns: 50% 50%;
-  grid-template-rows: auto 30% 1%;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
   align-items: center;
   justify-content: center;
   background-image: linear-gradient(to bottom right, #023047, #084462, #8ecae6);
@@ -70,30 +46,26 @@ main {
 .login-page-header {
   width: 100%;
   display: flex;
-  flex-wrap: wrap;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  /* padding-top: 6rem;
-  padding-left: 6rem; */
+  justify-content: center;
 }
 
 .forms-container {
   width: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
-  padding-top: 6rem;
-  padding-right: 6rem;
+  align-items: center;
 }
 
 /* signup and login containers: */
 .form-container {
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  justify-content: center;
+  /* gap: 1rem; */
 }
 
 #login-form, #signup-form {
@@ -101,16 +73,85 @@ main {
   padding: 1rem;
 }
 
+/* btns on landing page */
+#forgot-pw {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 0;
+  border-radius: 1rem;
+  color: #fff;
+  background-color: #084462;
+  box-shadow: 0.1rem 0.1rem 0.2rem 0.1rem #8ecae6 inset;
+}
+
+#forgot-pw:hover {
+  border-radius: 1rem;
+  background-color: #8ecae6;
+  cursor: pointer;
+}
+
+#luo-uusi-kayttaja-link {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 0;
+  border-radius: 1rem;
+  color: #fff;
+  background-color: #084462;
+  box-shadow: 0.1rem 0.1rem 0.2rem 0.1rem #8ecae6 inset;
+}
+
+#luo-uusi-kayttaja-link:hover {
+  background-color: #8ecae6;
+  cursor: pointer;
+}
+
+.signup-popup-container {
+  position: absolute;
+  bottom: 25%;
+}
+
+/* all input forms in login component: */
+#form-input {
+  width: 100%;
+  padding: 1rem;
+  margin: 0.1rem;
+  background-color: #8ecae6;
+  border: 0;
+  border-radius: 1rem;
+}
+
+#form-input:hover {
+  box-shadow: 0.1rem 0.1rem 0.2rem 0.1rem #023047 inset;
+}
+
+/* all buttons in login/signup-components: */
+.login-signup-button {
+  max-width: 100%;
+  padding: 1rem;
+  color: white;
+  border: 0;
+  background-color: #48B636;
+  box-shadow: 0.1rem 0.1rem 0.4rem 0.1rem #89e87a inset;
+  border-radius: 1rem;
+}
+
+.login-signup-button:hover {
+  cursor: pointer;
+  background-color: #55d641;
+}
+
+/* UI feedback element on btn click @ login/signup-components forms */
 .show-feedback-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
   justify-content: center;
-  margin: 50%
 }
 
-/* UI feedback element on btn click @ logincomponents forms */
 .show-feedback {
   display: flex;
   width: 50%;
@@ -129,37 +170,6 @@ main {
   .skroll {
     position: relative;
   }
-
-/* -- -- -- -- */
-
-/* all input forms in login component: */
-#form-input {
-  width: 100%;
-  padding: 1rem;
-  margin: 0.5rem;
-  background-color: #8ecae6;
-  border: 0;
-  border-radius: 1rem;
-}
-
-#form-input:hover {
-  box-shadow: 0.1rem 0.1rem 0.2rem 0.1rem #023047 inset;
-}
-
-/* all buttons in login-component: */
-.login-signup-button {
-  max-width: 100%;
-  padding: 1rem;
-  color: white;
-  border: 0;
-  background-color: #48B636;
-  box-shadow: 0.1rem 0.1rem 0.4rem 0.1rem #89e87a inset;
-  border-radius: 1rem;
-}
-
-.login-signup-button:hover {
-  background-color: #55d641;
-}
 
 /* -- -- -- -- */
 
